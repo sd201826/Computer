@@ -35,6 +35,8 @@ jobs:
               apt-get update
               apt-get install -y --no-install-recommends \
                 live-build \
+                isolinux \
+                syslinux-common \
                 debootstrap \
                 debian-archive-keyring \
                 squashfs-tools \
@@ -46,10 +48,13 @@ jobs:
               echo "Using Debian Trixie live-build:"
               lb --version
 
-              # Confirm the bootloader templates shipped by Trixie live-build
-              # are present before starting the expensive image build.
-              test -f /usr/share/live/build/bootloaders/isolinux/isolinux.bin
-              test -f /usr/share/live/build/bootloaders/syslinux_common/vesamenu.c32
+              # These live-build templates are symlinks to files supplied by
+              # isolinux and syslinux-common. Verify the links resolve.
+              dpkg-query -W isolinux syslinux-common
+              test -s /usr/share/live/build/bootloaders/isolinux/isolinux.bin
+              test -s /usr/share/live/build/bootloaders/syslinux_common/vesamenu.c32
+              ls -l /usr/share/live/build/bootloaders/isolinux/isolinux.bin
+              ls -l /usr/share/live/build/bootloaders/syslinux_common/vesamenu.c32
 
               chmod +x config/hooks/live/*.hook.chroot
               rm -rf dist
