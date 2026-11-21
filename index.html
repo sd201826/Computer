@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b1220">
-  <meta name="description" content="A personal PC recovery workspace for Windows installation media, USB preparation and a safe bootable setup simulator.">
+  <meta name="description" content="A Debian-based Restore Lab live USB with a graphical installer, Windows-inspired desktop and optional setup simulator.">
   <title>Restore Lab — PC Recovery Workspace</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,7 +35,7 @@
       <div class="hero-copy">
         <div class="eyebrow"><span class="pulse-dot"></span> PC RECOVERY WORKSPACE <span class="eyebrow-line"></span> v1.0</div>
         <h1>Give your old PC<br><span class="gradient-text">another start.</span></h1>
-        <p class="hero-lead">Run the Debian-based Restore Lab live OS in your browser, or boot it from one compact USB. The desktop opens an original Windows-style setup preview — not Microsoft Windows.</p>
+        <p class="hero-lead">Boot the Debian-based Restore Lab installer from a Rufus-made USB. Try it live or install Restore Lab to a selected drive. The Windows-style screens are an optional demo — not Microsoft Windows.</p>
         <div class="hero-actions">
           <a class="button button-primary" href="run.html">Run OS in browser <span aria-hidden="true">→</span></a>
           <a class="button button-quiet" href="#systems">Explore Windows versions</a>
@@ -70,7 +70,7 @@
 
     <section class="metric-strip shell" aria-label="Workspace capabilities">
       <div class="metric"><span class="metric-icon">01</span><div><strong>5 Windows eras</strong><small>11, 10, 7, Vista & XP</small></div></div>
-      <div class="metric"><span class="metric-icon">02</span><div><strong>Real media guidance</strong><small>Official sources first</small></div></div>
+      <div class="metric"><span class="metric-icon">02</span><div><strong>Actual installer</strong><small>Debian-based Linux</small></div></div>
       <div class="metric"><span class="metric-icon">03</span><div><strong>Browser virtual PC</strong><small>Run the Debian live OS</small></div></div>
     </section>
 
@@ -131,13 +131,13 @@
     <section class="section shell" id="live-os">
       <div class="live-os-card">
         <div class="live-os-copy">
-          <div class="section-kicker">02 / ONE BOOTABLE DEMO ISO</div>
+          <div class="section-kicker">02 / INSTALLABLE LIVE USB</div>
           <div class="demo-label"><span></span> WINDOWS-STYLE SETUP SIMULATOR</div>
-          <h2>One USB.<br>Five setup previews.</h2>
-          <p>Run the built Debian live OS directly in your browser with an emulated x86-64 PC, or boot it from a USB. The desktop includes Firefox ESR and automatically opens the Windows-style setup preview. The published ISO is about 782 MB.</p>
+          <h2>Boot the live system.<br>Or install it.</h2>
+          <p>Boot Restore Lab from a Rufus-made USB. Choose the live desktop to try it without installing, or open the Calamares installer to install the Debian-based system onto a selected drive. The Windows-style setup simulator is an optional visual demo.</p>
           <div class="live-feature-list">
-            <span>✓ About 782 MB ISO</span><span>✓ Run in browser or USB</span>
-            <span>✓ Built by GitHub in the cloud</span><span>✓ Virtual disk only — no host disk access</span>
+            <span>✓ Bootable installer ISO</span><span>✓ Graphical Calamares installer</span>
+            <span>✓ Built by GitHub in the cloud</span><span>✓ Optional live demo — no install required</span>
           </div>
           <div class="simulator-actions">
             <a class="button button-primary" href="run.html">Run OS in browser <span aria-hidden="true">▶</span></a>
@@ -158,30 +158,30 @@
             </div>
             <div class="setup-preview-footer">NO WINDOWS FILES · NO DISK WRITES</div>
           </div>
-          <div class="theme-note">A visual simulator only — not a Windows installer.</div>
+          <div class="theme-note">Optional visual simulator — the installer installs Debian-based Restore Lab, not Windows.</div>
         </div>
       </div>
     </section>
 
     <section class="section shell" id="usb">
       <div class="section-heading">
-        <div><div class="section-kicker">03 / USB PREPARATION</div><h2>Use a real USB drive</h2></div>
-        <p>This page can guide you, but it cannot take control of a flash drive like a desktop program can.</p>
+        <div><div class="section-kicker">03 / USB PREPARATION</div><h2>Create the installer USB with Rufus</h2></div>
+        <p>Use Rufus on Windows to write the Restore Lab installer ISO to a flash drive. The website itself cannot write to USB storage.</p>
       </div>
       <div class="usb-layout">
         <div class="usb-panel">
           <div class="usb-panel-head"><span class="usb-symbol">▰</span><span class="panel-tag">DEVICE ACCESS</span></div>
-          <h3>USB detection is handled by Windows and Rufus.</h3>
-          <p>For safety, browsers cannot directly list, format or write raw USB storage devices. Plug in your flash drive and check that it appears in File Explorer or Rufus.</p>
+          <h3>Write the installer ISO with Rufus.</h3>
+          <p>Download Restore-Lab-Installer-amd64.iso from the release page. In Rufus, choose your USB device and the ISO file. This creates bootable Restore Lab installation media.</p>
           <div class="device-state"><span class="device-state-dot"></span><div><strong>Direct USB access: unavailable</strong><small>This website has not scanned or changed any drive.</small></div></div>
           <a class="button button-outline" href="https://rufus.ie/" target="_blank" rel="noopener">Open official Rufus website <span aria-hidden="true">↗</span></a>
         </div>
         <div class="steps-panel">
           <div class="steps-title"><span>RUFUS WORKFLOW</span><span>3 STEPS</span></div>
-          <div class="step-row"><span class="step-number">01</span><div><strong>Connect the flash drive</strong><p>Use a USB drive with enough free capacity. Copy anything important off it first.</p></div></div>
-          <div class="step-row"><span class="step-number">02</span><div><strong>Select the real ISO in Rufus</strong><p>Choose the USB device and the genuine Windows ISO you downloaded from Microsoft.</p></div></div>
-          <div class="step-row"><span class="step-number">03</span><div><strong>Write and boot</strong><p>Rufus will erase the selected USB. Use your computer's one-time boot menu to start from it.</p></div></div>
-          <div class="danger-note"><span>!</span><p><strong>Important:</strong> Check the selected drive carefully. Rufus formatting permanently removes the files on that USB drive.</p></div>
+          <div class="step-row"><span class="step-number">01</span><div><strong>Download the Restore Lab ISO</strong><p>Get Restore-Lab-Installer-amd64.iso from the GitHub release page. Copy anything important off your USB first.</p></div></div>
+          <div class="step-row"><span class="step-number">02</span><div><strong>Select the Restore Lab ISO in Rufus</strong><p>Choose your USB device and the Restore Lab installer ISO. Check the device name and capacity before writing.</p></div></div>
+          <div class="step-row"><span class="step-number">03</span><div><strong>Boot and run the installer</strong><p>Restart, choose the USB from the one-time boot menu, then select Install Restore Lab. Use a separate target drive; do not select the USB you booted from.</p></div></div>
+          <div class="danger-note"><span>!</span><p><strong>Important:</strong> Rufus erases the selected USB. Later, the operating-system installer can also erase the target drive, including Windows and personal files. Back up first and ask for help if you are unsure.</p></div>
         </div>
       </div>
     </section>
