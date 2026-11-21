@@ -47,7 +47,7 @@
         (selectedIsoFile.size / (1024 * 1024)).toFixed(1) + " MiB";
       detail.textContent = "Your chosen ISO will be attached as a virtual DVD in this browser VM on the next start.";
     } else {
-      isoName.textContent = "Restore Lab installer ISO · size checked at start";
+      isoName.textContent = "Restore-Lab-Installer-amd64.iso · streamed from the release";
       detail.textContent = "The same Restore-Lab-Installer-amd64.iso used by Rufus is streamed here as a virtual DVD.";
     }
   }
