@@ -69,7 +69,7 @@
 
       emulator = new window.V86({
         wasm_path: "/api/vm-assets/v86.wasm",
-        memory_size: 1536 * 1024 * 1024,
+        memory_size: 1024 * 1024 * 1024,
         vga_memory_size: 16 * 1024 * 1024,
         screen_container: screenContainer,
         bios: { url: "/api/vm-assets/seabios.bin" },
@@ -77,7 +77,7 @@
         cdrom: { url: "/api/restore-lab-iso", async: true, size: 782237696 },
         boot_order: 0x123,
         acpi: true,
-        disable_audio: true,
+        disable_speaker: true,
         autostart: true
       });
 
