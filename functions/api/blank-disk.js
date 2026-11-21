@@ -1,4 +1,4 @@
-const DISK_SIZE = 4 * 1024 * 1024 * 1024;
+const DISK_SIZE = 16 * 1024 * 1024 * 1024;
 const MAX_RANGE_SIZE = 16 * 1024 * 1024;
 
 const CORS_HEADERS = {
@@ -62,10 +62,9 @@ export async function onRequest({ request }) {
   const length = end - start + 1;
   if (length > MAX_RANGE_SIZE) return rangeError();
 
-  // This is a sparse, all-zero virtual disk. The browser VM caches sectors
-  // that the guest writes in its own session; no host disk is exposed.
-  const zeroes = new Uint8Array(length);
-  return new Response(zeroes, {
+  // The base disk is sparse and zero-filled. Writes made by the guest are
+  // handled by the browser emulator for the current session only.
+  return new Response(new Uint8Array(length), {
     status: 206,
     headers: {
       ...CORS_HEADERS,
