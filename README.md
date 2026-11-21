@@ -1,55 +1,42 @@
-# Restore Lab — PC Recovery Workspace
+# Restore Lab — Windows-Style Setup Preview
 
-A Cloudflare Pages and GitHub project for PC recovery learning, Windows installation guidance, and a bootable Linux live desktop.\n\nWebsite: https://restore-lab.pages.dev
+Restore Lab is a website and a cloud-built bootable USB demo. The website is hosted on Cloudflare Pages; GitHub Actions builds the ISO on GitHub's cloud runners. The build does not run on your PC.
 
-## Restore Lab Live OS
+Website: https://restore-lab.pages.dev
 
-The new **Restore Lab Live** image is a Debian-based Linux operating system for 64-bit PCs. It includes:
+## What the USB does
 
-- XFCE graphical desktop
-- Firefox ESR web browser
-- Thunar file manager
-- Network Manager
-- Calamares graphical installer
-- Windows-inspired desktop appearance presets (11, 10, 7, Vista and XP styles)
+- Boots a small Debian Linux live system on 64-bit PCs.
+- Automatically opens an original, clearly labelled Windows-style setup simulator.
+- Lets you preview Windows 11, Windows 10, Windows 7, Windows Vista and Windows XP setup-inspired screens.
+- Includes Firefox ESR and a file manager.
+- Does not install any operating system, write to internal disks, format partitions, or alter files on the computer.
 
-It boots from USB as a live session, so you can try the desktop without installing it to the internal drive. The optional installer can install Linux to a selected disk.
+**This is a fake visual demonstration, not Microsoft Windows.** It does not contain Windows files, Windows drivers, activation, or a real Windows installer. The selected version is only a visual preview. Do not use this ISO as a Windows installation or recovery disk.
 
-**This is not Microsoft Windows.** It does not include Windows 11, 10, 7, Vista or XP, and it cannot run every Windows program. The theme presets only change the Linux desktop's appearance.
+## One ISO, compact target
 
-### Build and download
+The workflow produces one bootable hybrid ISO named `Restore-Lab-Setup-Preview-amd64.iso`. It compresses the live filesystem and checks that the final ISO is no larger than 2 GiB. The intended size is around 1–2 GB, but the actual size is only known after a successful build.
 
-GitHub Actions workflow: `.github/workflows/build-live-os.yml`
+## Build in the cloud
 
-- Open the repository's **Actions** tab and choose **Build Restore Lab Live OS**.
-- A successful build publishes the ISO to the [Restore Lab Live release](https://github.com/sd201826/Computer/releases/tag/restore-lab-live-latest).
-- The workflow also uploads an ISO and SHA256 checksum as an Actions artifact.
+1. Open the GitHub Actions page.
+2. Choose **Build Restore Lab Setup Preview ISO**.
+3. Wait for the workflow to complete successfully.
+4. The workflow publishes the single ISO and a SHA256 checksum to the [Restore Lab release](https://github.com/sd201826/Computer/releases/tag/restore-lab-live-latest).
 
-The ISO is intended for USB boot. A normal website cannot directly enumerate or write raw USB drives; use a suitable USB image writer. Writing an image erases the selected USB drive.
+GitHub Actions downloads packages and builds the image remotely. No Node.js, Python, Visual Studio, or local ISO build software is required on your PC.
 
-### Installation safety
+## Using the ISO
 
-The live desktop can be tested without installing it. If you launch Calamares, it can change disk partitions and erase data on the disk you select. Back up important files first and carefully review the target disk. Do not continue if you are unsure which disk is selected.
+To boot the demonstration, download the one ISO from the release page and write it to a USB using a USB image writer such as Rufus. This writing step is done on your PC because a normal website cannot directly access a raw USB drive. Writing the image erases the selected USB, so back up its contents first.
 
-## Windows installation information
+The ISO is designed for BIOS/UEFI boot on 64-bit x86 PCs. Hardware compatibility can vary.
 
-For genuine Windows installation media, use Microsoft's official pages:
+## Real Windows installation
 
+For an actual Windows installation, use Microsoft's genuine installation media:
 - [Windows 11](https://www.microsoft.com/software-download/windows11)
 - [Windows 10](https://www.microsoft.com/software-download/windows10)
 
-This project does not distribute Windows XP, Vista or Windows 7 ISO files. Use original licensed media for those legacy systems.
-
-## Website hosting
-
-The site is static HTML, CSS and JavaScript and can be hosted with GitHub Pages:
-
-1. Open repository **Settings**.
-2. Open **Pages**.
-3. Under **Build and deployment**, choose **Deploy from a branch**.
-4. Select branch **main** and folder **/(root)**, then save.
-5. Open the Pages URL shown there.
-
-## Safe visual simulator
-
-The older `simulator-latest` ISO is only a GRUB setup-style menu demo. It is not Windows and cannot install an operating system.
+Restore Lab is independent and is not affiliated with Microsoft. It does not distribute Windows installation images.
