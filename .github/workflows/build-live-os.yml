@@ -20,42 +20,70 @@ jobs:
       - name: Check out project
         uses: actions/checkout@v4
 
-      - name: Install Debian live-build tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y live-build debootstrap debian-archive-keyring squashfs-tools xorriso grub-pc-bin grub-efi-amd64-bin mtools
+      - name: Check Docker availability
+        run: docker --version
 
-      - name: Configure compact Debian live image
+      - name: Build live ISO with matching Debian Trixie tools
         run: |
-          chmod +x config/hooks/live/*.hook.chroot
-          sudo lb config \
-            --mode debian \
-            --distribution trixie \
-            --architectures amd64 \
-            --initsystem systemd \
-            --binary-images iso-hybrid \
-            --archive-areas "main non-free-firmware" \
-            --security false \
-            --apt-recommends false \
-            --apt-indices false \
-            --firmware-chroot false \
-            --firmware-binary false \
-            --bootappend-live "boot=live components username=restore hostname=restore-lab"
+          docker run --privileged --rm \
+            --volume "${GITHUB_WORKSPACE}:/workspace" \
+            --workdir /workspace \
+            debian:trixie \
+            bash -euo pipefail -c '
+              export DEBIAN_FRONTEND=noninteractive
 
-      - name: Build live ISO
-        run: |
-          sudo lb build
-          mkdir -p dist
-          sudo cp live-image-amd64.hybrid.iso dist/Restore-Lab-Setup-Preview-amd64.iso
-          sudo chown "$USER:$USER" dist/Restore-Lab-Setup-Preview-amd64.iso
-          SIZE_BYTES="$(stat -c%s dist/Restore-Lab-Setup-Preview-amd64.iso)"
-          SIZE_MIB="$((SIZE_BYTES / 1024 / 1024))"
-          echo "ISO size: ${SIZE_MIB} MiB"
-          if [ "$SIZE_BYTES" -gt 2147483648 ]; then
-            echo "::error::ISO is larger than the 2 GiB target. Reduce the package set before publishing."
-            exit 1
-          fi
-          sha256sum dist/Restore-Lab-Setup-Preview-amd64.iso | tee dist/SHA256SUMS.txt
+              apt-get update
+              apt-get install -y --no-install-recommends \
+                live-build \
+                debootstrap \
+                debian-archive-keyring \
+                squashfs-tools \
+                xorriso \
+                grub-pc-bin \
+                grub-efi-amd64-bin \
+                mtools
+
+              echo "Using Debian Trixie live-build:"
+              lb --version
+
+              # Confirm the bootloader templates shipped by Trixie live-build
+              # are present before starting the expensive image build.
+              test -f /usr/share/live/build/bootloaders/isolinux/isolinux.bin
+              test -f /usr/share/live/build/bootloaders/syslinux_common/vesamenu.c32
+
+              chmod +x config/hooks/live/*.hook.chroot
+              rm -rf dist
+              mkdir -p dist
+
+              lb config \
+                --mode debian \
+                --distribution trixie \
+                --architectures amd64 \
+                --initsystem systemd \
+                --binary-images iso-hybrid \
+                --archive-areas "main non-free-firmware" \
+                --security false \
+                --apt-recommends false \
+                --apt-indices false \
+                --firmware-chroot false \
+                --firmware-binary false \
+                --bootappend-live "boot=live components username=restore hostname=restore-lab"
+
+              lb build
+
+              test -s live-image-amd64.hybrid.iso
+              cp live-image-amd64.hybrid.iso dist/Restore-Lab-Setup-Preview-amd64.iso
+
+              SIZE_BYTES="$(stat -c%s dist/Restore-Lab-Setup-Preview-amd64.iso)"
+              SIZE_MIB="$((SIZE_BYTES / 1024 / 1024))"
+              echo "ISO size: ${SIZE_MIB} MiB"
+              if [ "$SIZE_BYTES" -gt 2147483648 ]; then
+                echo "::error::ISO is larger than the 2 GiB target. Reduce the package set before publishing."
+                exit 1
+              fi
+
+              sha256sum dist/Restore-Lab-Setup-Preview-amd64.iso | tee dist/SHA256SUMS.txt
+            '
 
       - name: Upload ISO artifact
         uses: actions/upload-artifact@v4
@@ -64,6 +92,7 @@ jobs:
           path: |
             dist/Restore-Lab-Setup-Preview-amd64.iso
             dist/SHA256SUMS.txt
+          if-no-files-found: error
           retention-days: 14
 
       - name: Publish setup preview ISO
