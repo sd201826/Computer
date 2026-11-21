@@ -1,5 +1,5 @@
 const ISO_URL =
-  "https://github.com/sd201826/Computer/releases/download/restore-lab-live-latest/Restore-Lab-Setup-Preview-amd64.iso";
+  "https://github.com/sd201826/Computer/releases/download/restore-lab-live-latest/Restore-Lab-Installer-amd64.iso";
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -39,7 +39,7 @@ export async function onRequest({ request }) {
     });
 
     // A range request must stay a partial response; do not accidentally stream
-    // the entire 782 MB image if the upstream host stops honoring Range.
+    // the entire installer ISO if the upstream host stops honoring Range.
     if (request.headers.has("Range") && upstream.status !== 206 && upstream.status !== 416) {
       return new Response("The ISO host did not honor the requested byte range.", {
         status: 502,
