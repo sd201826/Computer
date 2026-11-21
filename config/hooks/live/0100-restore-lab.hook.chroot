@@ -1,0 +1,44 @@
+#!/bin/sh
+set -e
+
+# Add a clear installer shortcut to the live user's desktop template.
+mkdir -p /etc/skel/Desktop
+cat > /etc/skel/Desktop/Install-Restore-Lab.desktop <<'EOF'
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Install Restore Lab
+Comment=Install the Debian-based Restore Lab system to a computer
+Exec=pkexec calamares
+Icon=system-software-install
+Terminal=false
+Categories=System;
+EOF
+chmod 755 /etc/skel/Desktop/Install-Restore-Lab.desktop
+
+# Add a simple offline help page explaining the system and its limits.
+mkdir -p /usr/share/restore-lab
+cat > /usr/share/restore-lab/ABOUT.txt <<'EOF'
+RESTORE LAB LIVE
+
+This is a Debian-based Linux live operating system, not Microsoft Windows.
+It includes an XFCE desktop, Firefox ESR, Thunar file manager and Calamares installer.
+You can use the live desktop without installing it. Files saved to the USB or internal
+drives remain there only when you deliberately choose a writable location.
+
+The installer can change disk partitions and erase data. Back up important files,
+identify the correct target disk, and do not continue unless you understand the choices.
+Windows XP, Vista, 7, 10 and 11 are not included.
+EOF
+
+# Prefer a dark GTK theme when the live user first signs in.
+mkdir -p /etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml
+cat > /etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml <<'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<channel name="xsettings" version="1.0">
+  <property name="Net" type="empty">
+    <property name="ThemeName" type="string" value="Arc-Dark"/>
+    <property name="IconThemeName" type="string" value="Adwaita"/>
+  </property>
+</channel>
+EOF
