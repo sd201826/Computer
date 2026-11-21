@@ -1,45 +1,55 @@
 # Restore Lab — PC Recovery Workspace
 
-A GitHub Pages website for comparing Windows installation options, understanding USB/Rufus preparation, and booting a harmless setup-style simulator.
+A GitHub Pages project for PC recovery learning, Windows installation guidance, and a bootable Linux live desktop.
 
-## Important distinction
+## Restore Lab Live OS
 
-The **Restore Lab Setup Simulator ISO is not Windows**. It contains a small GRUB boot menu with visual setup previews for Windows 11, 10, 7, Vista and XP. It does not contain Microsoft Windows files, install an operating system, format a drive, or modify files on the computer.
+The new **Restore Lab Live** image is a Debian-based Linux operating system for 64-bit PCs. It includes:
 
-For real Windows installation media, use Microsoft's official download pages:
+- XFCE graphical desktop
+- Firefox ESR web browser
+- Thunar file manager
+- Network Manager
+- Calamares graphical installer
+- Windows-inspired desktop appearance presets (11, 10, 7, Vista and XP styles)
+
+It boots from USB as a live session, so you can try the desktop without installing it to the internal drive. The optional installer can install Linux to a selected disk.
+
+**This is not Microsoft Windows.** It does not include Windows 11, 10, 7, Vista or XP, and it cannot run every Windows program. The theme presets only change the Linux desktop's appearance.
+
+### Build and download
+
+GitHub Actions workflow: `.github/workflows/build-live-os.yml`
+
+- Open the repository's **Actions** tab and choose **Build Restore Lab Live OS**.
+- A successful build publishes the ISO to the [Restore Lab Live release](https://github.com/sd201826/Computer/releases/tag/restore-lab-live-latest).
+- The workflow also uploads an ISO and SHA256 checksum as an Actions artifact.
+
+The ISO is intended for USB boot. A normal website cannot directly enumerate or write raw USB drives; use a suitable USB image writer. Writing an image erases the selected USB drive.
+
+### Installation safety
+
+The live desktop can be tested without installing it. If you launch Calamares, it can change disk partitions and erase data on the disk you select. Back up important files first and carefully review the target disk. Do not continue if you are unsure which disk is selected.
+
+## Windows installation information
+
+For genuine Windows installation media, use Microsoft's official pages:
+
 - [Windows 11](https://www.microsoft.com/software-download/windows11)
 - [Windows 10](https://www.microsoft.com/software-download/windows10)
 
 This project does not distribute Windows XP, Vista or Windows 7 ISO files. Use original licensed media for those legacy systems.
 
-## Website
+## Website hosting
 
-The site is static HTML, CSS and JavaScript. It can be hosted with GitHub Pages:
+The site is static HTML, CSS and JavaScript and can be hosted with GitHub Pages:
 
-1. Open the repository's **Settings**.
+1. Open repository **Settings**.
 2. Open **Pages**.
 3. Under **Build and deployment**, choose **Deploy from a branch**.
 4. Select branch **main** and folder **/(root)**, then save.
-5. Open the Pages URL shown in that settings screen.
+5. Open the Pages URL shown there.
 
-## Build the bootable demo ISO
+## Safe visual simulator
 
-The GitHub Actions workflow `.github/workflows/build-demo-iso.yml` builds a hybrid BIOS/UEFI GRUB ISO when the boot files change or when manually started.
-
-- Open the **Actions** tab.
-- Select **Build bootable setup simulator**.
-- A successful run publishes a rolling release named `simulator-latest`.
-- The workflow also uploads the ISO as a short-lived Actions artifact.
-
-The ISO can be selected in Rufus for a visual boot test. It is not usable to install Windows.
-
-## Browser and USB limitations
-
-A normal website cannot directly enumerate, format or write raw USB mass-storage drives. Use Windows File Explorer and Rufus for actual USB device selection and writing. Rufus warns that writing an image erases the selected USB drive.
-
-## Project scope
-
-- Windows 11 and Windows 10 official download links.
-- Legacy Windows compatibility notes.
-- Rufus preparation guidance and restore checklist.
-- Safe visual boot simulator ISO.
+The older `simulator-latest` ISO is only a GRUB setup-style menu demo. It is not Windows and cannot install an operating system.
