@@ -44,7 +44,7 @@
     selectedIsoFile = file || null;
     if (selectedIsoFile) {
       const size = (selectedIsoFile.size / (1024 * 1024)).toFixed(1) + " MiB";
-      if (selectedIsoFile.name.toLowerCase().endsWith(".img") ? true : false.test(selectedIsoFile.name)) {
+      if (selectedIsoFile.name.toLowerCase().endsWith(".img")) {
         isoName.textContent = selectedIsoFile.name + " · " + size + " · virtual hard disk";
         detail.textContent = "This IMG file will be attached as the virtual hard drive and booted inside the browser.";
       } else {
@@ -99,7 +99,7 @@
   }
 
   function buildStorageOptions(remoteIsoSize) {
-    const localDiskImage = Boolean(selectedIsoFile && selectedIsoFile.name.toLowerCase().endsWith(".img").test(selectedIsoFile.name));
+    const localDiskImage = Boolean(selectedIsoFile && selectedIsoFile.name.toLowerCase().endsWith(".img"));
     const localImage = selectedIsoFile ? { buffer: selectedIsoFile } : null;
 
     return {
