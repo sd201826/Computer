@@ -300,6 +300,8 @@
     fallbackFiles = files;
     fallbackRootName = (files[0].webkitRelativePath || files[0].name).split("/")[0];
     clearButton.disabled = false;
+    backButton.disabled = true;
+    refreshButton.disabled = false;
     updatePath();
     renderFallbackFiles();
     setStatus("Folder selected. Browser fallback shows selected files only.", "ok");
@@ -324,6 +326,7 @@
     searchInput.value = "";
     clearButton.disabled = true;
     backButton.disabled = true;
+    refreshButton.disabled = true;
     driveName.textContent = "No drive selected";
     breadcrumb.textContent = "Connect a USB folder to begin";
     countLabel.textContent = "0 items";
