@@ -1,0 +1,51 @@
+name: Build bootable setup simulator
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "boot/**"
+      - ".github/workflows/build-demo-iso.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out project
+        uses: actions/checkout@v4
+
+      - name: Install ISO build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y grub-pc-bin grub-efi-amd64-bin xorriso mtools
+
+      - name: Build hybrid BIOS and UEFI ISO
+        run: |
+          mkdir -p iso-root/boot/grub dist
+          cp boot/grub/grub.cfg iso-root/boot/grub/grub.cfg
+          cp boot/grub/demo.cfg iso-root/boot/demo.cfg
+          grub-mkrescue -o dist/Restore-Lab-Setup-Simulator.iso iso-root
+
+      - name: Save workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Restore-Lab-Setup-Simulator
+          path: dist/Restore-Lab-Setup-Simulator.iso
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Publish or update the demo ISO release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          NOTES="Safe visual boot demo only. This ISO does not contain Windows, install an operating system, format disks, or modify files."
+          if gh release view simulator-latest >/dev/null 2>&1; then
+            gh release upload simulator-latest dist/Restore-Lab-Setup-Simulator.iso --clobber
+            gh release edit simulator-latest --title "Restore Lab Setup Simulator (Demo)" --notes "$NOTES"
+          else
+            gh release create simulator-latest dist/Restore-Lab-Setup-Simulator.iso --title "Restore Lab Setup Simulator (Demo)" --notes "$NOTES" --latest
+          fi
