@@ -30,9 +30,15 @@ The USB that you booted from is the installation source and should not be select
 
 The ISO is intended for BIOS/UEFI boot on 64-bit x86 PCs. Hardware compatibility can vary.
 
-## Run the live OS in your browser
+## Run the same installer on the website
 
-Open the [Restore Lab Browser VM](https://restore-lab.pages.dev/run.html) to try the emulated system. Browser virtualization is separate from booting a physical USB and may be slow or incompatible on some devices. The VM does not access your computer's real internal drives or physical USB devices.
+Open the [Restore Lab Browser VM](https://restore-lab.pages.dev/run.html). It streams the exact same published Restore-Lab-Installer-amd64.iso that you download for Rufus, attaching it as a virtual DVD inside an emulated x86-64 PC. The browser VM has a temporary 16 GiB virtual hard disk so you can explore the installer in a sandbox. This virtual disk is cleared when you power off; it is not your real Windows drive and it does not write to a physical USB.
+
+## Boot the same ISO from a real USB
+
+Download Restore-Lab-Installer-amd64.iso from the [release page](https://github.com/sd201826/Computer/releases/tag/restore-lab-live-latest), select it in Rufus, and write it to your USB drive. Rufus erases the selected USB. Restart the computer, boot from that USB, then choose the live desktop or **Install Restore Lab**. The live USB runs on your real PC; the installer can install to a selected internal or external drive. Back up important files first and carefully check the destination drive.
+
+The browser VM and the physical USB use the same ISO, but they operate in different places: the browser is an isolated virtual computer, while the USB boots your actual computer. The browser cannot use a physical USB drive or modify your computer's Windows installation.
 
 ## Build in the cloud
 
