@@ -1,6 +1,6 @@
 # Restore Lab — PC Recovery Workspace
 
-A GitHub Pages project for PC recovery learning, Windows installation guidance, and a bootable Linux live desktop.
+A Cloudflare Pages and GitHub project for PC recovery learning, Windows installation guidance, and a bootable Linux live desktop.\n\nWebsite: https://restore-lab.pages.dev
 
 ## Restore Lab Live OS
 
