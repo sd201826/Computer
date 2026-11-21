@@ -21,6 +21,7 @@
 .usb-toolbar .button { min-height:32px; padding:7px 11px; font-size:9px; }
 .usb-drive-label { min-width:0; flex:1; color:#e1ebf8; font-size:11px; font-weight:700; }
 .usb-drive-label small { display:block; color:#7f91aa; font-size:9px; font-weight:400; margin-top:4px; overflow-wrap:anywhere; }
+.usb-count { flex:0 0 auto; color:#8da1bc; font:8px "DM Mono",monospace; }
 .usb-search { width:calc(100% - 36px); margin:0 18px 12px; padding:10px 12px; color:#eef4fc; border:1px solid rgba(137,164,199,.22); border-radius:8px; background:#081321; outline:none; }
 .usb-search:focus { border-color:rgba(91,191,218,.65); box-shadow:0 0 0 3px rgba(91,191,218,.1); }
 .usb-list-head { display:grid; grid-template-columns:26px minmax(0,1fr) 90px 80px; gap:8px; padding:9px 18px; color:#6f86a5; border-top:1px solid rgba(137,164,199,.12); border-bottom:1px solid rgba(137,164,199,.12); font:8px "DM Mono",monospace; text-transform:uppercase; letter-spacing:.08em; }
