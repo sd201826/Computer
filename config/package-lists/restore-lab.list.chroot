@@ -1,7 +1,5 @@
 live-boot
 live-config
-live-config-systemd
-systemd-sysv
 xorg
 lightdm
 lightdm-gtk-greeter
