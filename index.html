@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1220">
+  <meta name="description" content="A personal PC recovery workspace for Windows installation media, USB preparation and a safe bootable setup simulator.">
+  <title>Restore Lab — PC Recovery Workspace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <header class="topbar">
+    <a class="brand" href="#home" aria-label="Restore Lab home">
+      <span class="brand-mark"><span></span><span></span><span></span><span></span></span>
+      <span>RESTORE<span class="brand-light">LAB</span></span>
+      <span class="version-tag">PERSONAL</span>
+    </a>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="#systems">Systems</a>
+      <a href="#usb">USB & Rufus</a>
+      <a href="#simulator">Boot simulator</a>
+      <a href="#restore">Restore guide</a>
+    </nav>
+    <a class="top-action" href="https://github.com/sd201826/Computer" target="_blank" rel="noopener">View source <span aria-hidden="true">↗</span></a>
+  </header>
+
+  <main id="home">
+    <section class="hero shell">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="pulse-dot"></span> PC RECOVERY WORKSPACE <span class="eyebrow-line"></span> v1.0</div>
+        <h1>Give your old PC<br><span class="gradient-text">another start.</span></h1>
+        <p class="hero-lead">Choose a Windows era, prepare real installation media, or boot into a safe setup-style demo. Everything is explained before you touch a USB drive.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#systems">Explore Windows <span aria-hidden="true">→</span></a>
+          <a class="button button-quiet" href="#simulator">See boot simulator</a>
+        </div>
+        <div class="hero-footnotes">
+          <span><i class="tiny-check">✓</i> BIOS + UEFI demo</span>
+          <span><i class="tiny-check">✓</i> No drive changes from this website</span>
+        </div>
+      </div>
+
+      <div class="console-card">
+        <div class="console-top">
+          <div class="window-dots"><i></i><i></i><i></i></div>
+          <span>RESTORE CONSOLE</span>
+          <span class="console-live"><b></b> READY</span>
+        </div>
+        <div class="console-content">
+          <div class="console-heading">SYSTEM OVERVIEW</div>
+          <div class="console-row"><span>Workspace</span><strong>Computer recovery</strong></div>
+          <div class="console-row"><span>USB access</span><strong class="status-limited">Browser limited</strong></div>
+          <div class="console-row"><span>Disk protection</span><strong class="status-ok">No disk writes</strong></div>
+          <div class="console-row"><span>Boot preview</span><strong class="status-ok">GRUB demo image</strong></div>
+          <div class="console-progress-label"><span>SAFE MODE</span><span>100%</span></div>
+          <div class="console-progress"><span></span></div>
+          <div class="console-note"><span class="note-symbol">!</span> A real Windows install needs genuine Microsoft media and a valid licence.</div>
+        </div>
+        <div class="console-bottom"><span>RESTORE LAB / LOCAL SESSION</span><span>01 — 04</span></div>
+      </div>
+      <div class="hero-orbit orbit-a"></div>
+      <div class="hero-orbit orbit-b"></div>
+    </section>
+
+    <section class="metric-strip shell" aria-label="Workspace capabilities">
+      <div class="metric"><span class="metric-icon">01</span><div><strong>5 Windows eras</strong><small>11, 10, 7, Vista & XP</small></div></div>
+      <div class="metric"><span class="metric-icon">02</span><div><strong>Real media guidance</strong><small>Official sources first</small></div></div>
+      <div class="metric"><span class="metric-icon">03</span><div><strong>Safe boot demo</strong><small>Does not install an OS</small></div></div>
+    </section>
+
+    <section class="section shell" id="systems">
+      <div class="section-heading">
+        <div><div class="section-kicker">01 / PICK YOUR SYSTEM</div><h2>Choose a Windows version</h2></div>
+        <p>Open a system to see its media options and important compatibility notes.</p>
+      </div>
+
+      <div class="system-grid">
+        <button class="system-card selected" type="button" data-system="win11" aria-pressed="true">
+          <span class="system-topline"><span class="system-icon windows-icon">▦</span><span class="system-status status-current">CURRENT</span></span>
+          <span class="system-name">Windows 11</span>
+          <span class="system-desc">Modern setup media</span>
+          <span class="system-bottom"><span>Official Microsoft source</span><span class="arrow">↗</span></span>
+        </button>
+        <button class="system-card" type="button" data-system="win10" aria-pressed="false">
+          <span class="system-topline"><span class="system-icon win10-icon">▦</span><span class="system-status status-legacy">LEGACY</span></span>
+          <span class="system-name">Windows 10</span>
+          <span class="system-desc">Classic desktop setup</span>
+          <span class="system-bottom"><span>Microsoft download page</span><span class="arrow">↗</span></span>
+        </button>
+        <button class="system-card" type="button" data-system="win7" aria-pressed="false">
+          <span class="system-topline"><span class="system-icon win7-icon">✦</span><span class="system-status status-old">OLDER</span></span>
+          <span class="system-name">Windows 7</span>
+          <span class="system-desc">Original licensed media</span>
+          <span class="system-bottom"><span>Compatibility notes</span><span class="arrow">→</span></span>
+        </button>
+        <button class="system-card" type="button" data-system="vista" aria-pressed="false">
+          <span class="system-topline"><span class="system-icon vista-icon">◈</span><span class="system-status status-old">OLDER</span></span>
+          <span class="system-name">Windows Vista</span>
+          <span class="system-desc">Legacy hardware era</span>
+          <span class="system-bottom"><span>Compatibility notes</span><span class="arrow">→</span></span>
+        </button>
+        <button class="system-card" type="button" data-system="xp" aria-pressed="false">
+          <span class="system-topline"><span class="system-icon xp-icon">✳</span><span class="system-status status-old">OLDER</span></span>
+          <span class="system-name">Windows XP</span>
+          <span class="system-desc">Classic legacy system</span>
+          <span class="system-bottom"><span>Compatibility notes</span><span class="arrow">→</span></span>
+        </button>
+      </div>
+
+      <div class="system-detail" aria-live="polite">
+        <div class="detail-icon" id="detail-icon">▦</div>
+        <div class="detail-copy">
+          <div class="detail-eyebrow" id="detail-eyebrow">OFFICIAL INSTALLATION MEDIA</div>
+          <h3 id="detail-title">Windows 11</h3>
+          <p id="detail-description">Use Microsoft's official page to create installation media or download an ISO. Check hardware requirements before installing.</p>
+          <div class="detail-warning" id="detail-warning">Back up important files first. Creating a bootable USB erases the USB drive.</div>
+        </div>
+        <div class="detail-action">
+          <a class="button button-primary" id="detail-link" href="https://www.microsoft.com/software-download/windows11" target="_blank" rel="noopener">Open Microsoft <span aria-hidden="true">↗</span></a>
+          <span id="detail-link-note">Opens the official download page</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section shell" id="usb">
+      <div class="section-heading">
+        <div><div class="section-kicker">02 / USB PREPARATION</div><h2>Use a real USB drive</h2></div>
+        <p>This page can guide you, but it cannot take control of a flash drive like a desktop program can.</p>
+      </div>
+      <div class="usb-layout">
+        <div class="usb-panel">
+          <div class="usb-panel-head"><span class="usb-symbol">▰</span><span class="panel-tag">DEVICE ACCESS</span></div>
+          <h3>USB detection is handled by Windows and Rufus.</h3>
+          <p>For safety, browsers cannot directly list, format or write raw USB storage devices. Plug in your flash drive and check that it appears in File Explorer or Rufus.</p>
+          <div class="device-state"><span class="device-state-dot"></span><div><strong>Direct USB access: unavailable</strong><small>This website has not scanned or changed any drive.</small></div></div>
+          <a class="button button-outline" href="https://rufus.ie/" target="_blank" rel="noopener">Open official Rufus website <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="steps-panel">
+          <div class="steps-title"><span>RUFUS WORKFLOW</span><span>3 STEPS</span></div>
+          <div class="step-row"><span class="step-number">01</span><div><strong>Connect the flash drive</strong><p>Use a USB drive with enough free capacity. Copy anything important off it first.</p></div></div>
+          <div class="step-row"><span class="step-number">02</span><div><strong>Select the real ISO in Rufus</strong><p>Choose the USB device and the genuine Windows ISO you downloaded from Microsoft.</p></div></div>
+          <div class="step-row"><span class="step-number">03</span><div><strong>Write and boot</strong><p>Rufus will erase the selected USB. Use your computer's one-time boot menu to start from it.</p></div></div>
+          <div class="danger-note"><span>!</span><p><strong>Important:</strong> Check the selected drive carefully. Rufus formatting permanently removes the files on that USB drive.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section shell" id="simulator">
+      <div class="simulator-card">
+        <div class="simulator-copy">
+          <div class="section-kicker">03 / BOOTABLE DEMO IMAGE</div>
+          <div class="demo-label"><span></span> VISUAL SIMULATOR — NOT WINDOWS</div>
+          <h2>See a setup screen<br>before installing anything.</h2>
+          <p>A small custom ISO is built by GitHub Actions. It boots to a setup-inspired menu for Windows 11, 10, 7, Vista and XP. It does not contain Windows files and cannot install, repair or activate Windows.</p>
+          <div class="simulator-actions">
+            <a class="button button-primary" href="https://github.com/sd201826/Computer/releases/tag/simulator-latest" target="_blank" rel="noopener">Get demo ISO <span aria-hidden="true">↓</span></a>
+            <a class="text-link" href="https://github.com/sd201826/Computer/actions/workflows/build-demo-iso.yml" target="_blank" rel="noopener">View ISO build status ↗</a>
+          </div>
+          <div class="simulator-warning"><span>!</span> Rufus can write this demo ISO, but booting it only opens the simulator. It is not a Windows installer.</div>
+        </div>
+        <div class="boot-preview" aria-label="Illustration of the boot simulator menu">
+          <div class="boot-top"><span>RESTORE LAB SETUP</span><span>BOOT MENU</span></div>
+          <div class="boot-title">Select a setup preview</div>
+          <div class="boot-option active"><span>▸</span> Windows 11 — Visual demo</div>
+          <div class="boot-option"><span> </span> Windows 10 — Visual demo</div>
+          <div class="boot-option"><span> </span> Windows 7 — Visual demo</div>
+          <div class="boot-option"><span> </span> Windows Vista — Visual demo</div>
+          <div class="boot-option"><span> </span> Windows XP — Visual demo</div>
+          <div class="boot-foot"><span>ENTER: SELECT</span><span>ESC: BACK</span></div>
+          <div class="boot-disclaimer">DEMO ONLY · NO DISK WRITES</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section shell" id="restore">
+      <div class="section-heading">
+        <div><div class="section-kicker">04 / COMPUTER RESTORE</div><h2>A safer restore checklist</h2></div>
+        <p>Follow the order. Do not format a drive unless you have a verified backup and know exactly which disk you selected.</p>
+      </div>
+      <div class="restore-grid">
+        <article class="restore-item"><span class="restore-number">01</span><span class="restore-icon">⌁</span><h3>Back up</h3><p>Copy documents, photos and important files to a separate safe location.</p></article>
+        <article class="restore-item"><span class="restore-number">02</span><span class="restore-icon">⬇</span><h3>Get real media</h3><p>Download installation media from Microsoft or use your original licensed media.</p></article>
+        <article class="restore-item"><span class="restore-number">03</span><span class="restore-icon">▰</span><h3>Prepare USB</h3><p>Use Rufus with the correct ISO. Remember that writing the image erases the USB.</p></article>
+        <article class="restore-item"><span class="restore-number">04</span><span class="restore-icon">⌘</span><h3>Choose repair first</h3><p>When available, try Windows Recovery or Startup Repair before a clean installation.</p></article>
+      </div>
+    </section>
+
+    <section class="footer-callout shell">
+      <div><span class="section-kicker">BUILT FOR LEARNING</span><h2>Real tools. Clear limits. Safer restores.</h2></div>
+      <a class="button button-outline" href="https://github.com/sd201826/Computer" target="_blank" rel="noopener">Improve this project on GitHub ↗</a>
+    </section>
+  </main>
+
+  <footer class="footer shell">
+    <span>© <span id="year"></span> RESTORE LAB · PERSONAL PROJECT</span>
+    <span>Windows is a Microsoft trademark. This project is independent and unofficial.</span>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>
