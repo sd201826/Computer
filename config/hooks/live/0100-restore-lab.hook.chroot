@@ -1,8 +1,7 @@
 #!/bin/sh
 set -e
 
-# Add a clear installer shortcut to the live user's desktop template.
-mkdir -p /etc/skel/Desktop
+mkdir -p /etc/skel/Desktop /usr/share/restore-lab /usr/local/bin
 cat > /etc/skel/Desktop/Install-Restore-Lab.desktop <<'EOF'
 [Desktop Entry]
 Version=1.0
@@ -16,29 +15,59 @@ Categories=System;
 EOF
 chmod 755 /etc/skel/Desktop/Install-Restore-Lab.desktop
 
-# Add a simple offline help page explaining the system and its limits.
-mkdir -p /usr/share/restore-lab
-cat > /usr/share/restore-lab/ABOUT.txt <<'EOF'
-RESTORE LAB LIVE
-
-This is a Debian-based Linux live operating system, not Microsoft Windows.
-It includes an XFCE desktop, Firefox ESR, Thunar file manager and Calamares installer.
-You can use the live desktop without installing it. Files saved to the USB or internal
-drives remain there only when you deliberately choose a writable location.
-
-The installer can change disk partitions and erase data. Back up important files,
-identify the correct target disk, and do not continue unless you understand the choices.
-Windows XP, Vista, 7, 10 and 11 are not included.
+cat > /etc/skel/Desktop/Choose-Desktop-Style.desktop <<'EOF'
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Choose Desktop Style
+Comment=Choose a Windows-inspired Restore Lab desktop appearance
+Exec=restore-theme
+Icon=preferences-desktop-theme
+Terminal=false
+Categories=Settings;DesktopSettings;
 EOF
+chmod 755 /etc/skel/Desktop/Choose-Desktop-Style.desktop
 
-# Prefer a dark GTK theme when the live user first signs in.
+cat > /usr/local/bin/restore-theme <<'EOF'
+#!/bin/sh
+choice="$(zenity --list --title='Restore Lab Desktop Styles' --text='Choose a visual style. These are Linux desktop themes, not Windows.' --column='Style' 'Windows 11 inspired' 'Windows 10 inspired' 'Windows 7 inspired' 'Windows Vista inspired' 'Windows XP inspired' 2>/dev/null)" || exit 0
+case "$choice" in
+  'Windows 11 inspired') theme='Arc-Dark'; icons='Papirus-Dark' ;;
+  'Windows 10 inspired') theme='Greybird'; icons='Papirus' ;;
+  'Windows 7 inspired') theme='Adwaita'; icons='Adwaita' ;;
+  'Windows Vista inspired') theme='Numix'; icons='Numix' ;;
+  'Windows XP inspired') theme='Greybird'; icons='Adwaita' ;;
+  *) exit 0 ;;
+esac
+xfconf-query -c xsettings -p /Net/ThemeName --create -t string -s "$theme"
+xfconf-query -c xsettings -p /Net/IconThemeName --create -t string -s "$icons"
+xfconf-query -c xfwm4 -p /general/theme --create -t string -s "$theme"
+zenity --info --title='Restore Lab' --text="Applied the $choice appearance. This changes the Linux desktop theme only." 2>/dev/null || true
+EOF
+chmod 755 /usr/local/bin/restore-theme
+
 mkdir -p /etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml
 cat > /etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml <<'EOF'
 <?xml version="1.0" encoding="UTF-8"?>
 <channel name="xsettings" version="1.0">
   <property name="Net" type="empty">
     <property name="ThemeName" type="string" value="Arc-Dark"/>
-    <property name="IconThemeName" type="string" value="Adwaita"/>
+    <property name="IconThemeName" type="string" value="Papirus-Dark"/>
   </property>
 </channel>
+EOF
+
+cat > /usr/share/restore-lab/ABOUT.txt <<'EOF'
+RESTORE LAB LIVE
+
+This is a Debian-based Linux live operating system, not Microsoft Windows.
+It includes an XFCE desktop, Firefox ESR, Thunar file manager and Calamares installer.
+Use Choose Desktop Style to select Windows-inspired Linux themes.
+
+You can use the live desktop without installing it. Files saved to the USB or
+internal drives remain there only when you deliberately choose a writable location.
+
+The installer can change disk partitions and erase data. Back up important files,
+identify the correct target disk, and do not continue unless you understand the choices.
+Windows XP, Vista, 7, 10 and 11 are not included.
 EOF
