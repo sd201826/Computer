@@ -44,7 +44,7 @@
     selectedIsoFile = file || null;
     if (selectedIsoFile) {
       const size = (selectedIsoFile.size / (1024 * 1024)).toFixed(1) + " MiB";
-      if (/\\.img$/i.test(selectedIsoFile.name)) {
+      if (selectedIsoFile.name.toLowerCase().endsWith(".img") ? true : false.test(selectedIsoFile.name)) {
         isoName.textContent = selectedIsoFile.name + " · " + size + " · virtual hard disk";
         detail.textContent = "This IMG file will be attached as the virtual hard drive and booted inside the browser.";
       } else {
@@ -99,7 +99,7 @@
   }
 
   function buildStorageOptions(remoteIsoSize) {
-    const localDiskImage = Boolean(selectedIsoFile && /\\.img$/i.test(selectedIsoFile.name));
+    const localDiskImage = Boolean(selectedIsoFile && selectedIsoFile.name.toLowerCase().endsWith(".img").test(selectedIsoFile.name));
     const localImage = selectedIsoFile ? { buffer: selectedIsoFile } : null;
 
     return {
@@ -189,9 +189,15 @@
 
       emulator.add_listener("download-error", (event) => {
         const name = event && event.file_name ? event.file_name : "a VM image";
+        const failed = emulator;
+        emulator = null;
+        placeholder.hidden = false;
+        setControls();
         setStatus("Could not load VM media", "error");
-        detail.textContent = "Failed to load " + name + ". Check the internet connection or select a different image. Power off before trying again.";
-        startButton.disabled = false;
+        detail.textContent = "Failed to load " + name + ". Check the internet connection or choose another ISO / IMG file.";
+        if (failed) {
+          Promise.resolve().then(() => failed.stop()).then(() => failed.destroy()).catch(() => {});
+        }
       });
 
       setControls();
