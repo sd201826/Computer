@@ -1,0 +1,49 @@
+/* Read-only USB browser workspace */
+.usb-page { padding-top: 32px; padding-bottom: 56px; }
+.usb-hero { display:grid; grid-template-columns:1.1fr .9fr; gap:36px; align-items:center; padding:66px 0 44px; }
+.usb-hero h1 { margin:14px 0 14px; font-size:clamp(36px,5.2vw,62px); line-height:1.04; letter-spacing:-.055em; }
+.usb-hero p { max-width:650px; color:#9aabc2; font-size:14px; line-height:1.85; }
+.usb-hero-card { padding:24px; border:1px solid rgba(105,168,224,.25); border-radius:17px; background:linear-gradient(140deg,#12243a,#0d1929); }
+.usb-hero-card strong { display:block; font-size:13px; margin-bottom:8px; }
+.usb-hero-card p { font-size:11px; margin:0; }
+.usb-hero-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:22px; }
+.usb-workspace { display:grid; grid-template-columns:minmax(0,1.25fr) minmax(270px,.75fr); gap:16px; align-items:start; }
+.usb-panel, .usb-side-card { min-width:0; border:1px solid rgba(137,164,199,.18); border-radius:16px; background:rgba(12,21,36,.86); overflow:hidden; }
+.usb-panel-head { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:18px 20px; border-bottom:1px solid rgba(137,164,199,.14); }
+.usb-panel-head h2 { margin:5px 0 0; font-size:18px; }
+.usb-panel-head .section-kicker { font-size:8px; }
+.usb-actions { display:flex; flex-wrap:wrap; gap:8px; padding:14px 18px; }
+.usb-status { margin:0 18px 14px; padding:10px 12px; border:1px solid rgba(137,164,199,.15); border-radius:8px; color:#a7b6ca; background:rgba(255,255,255,.025); font-size:10px; }
+.usb-status[data-kind="ok"] { border-color:rgba(85,214,158,.25); color:#9ce2c1; }
+.usb-status[data-kind="busy"] { border-color:rgba(245,185,93,.24); color:#e7c18b; }
+.usb-status[data-kind="error"] { border-color:rgba(255,116,116,.25); color:#ffb0b0; }
+.usb-toolbar { display:flex; align-items:center; flex-wrap:wrap; gap:8px; padding:0 18px 12px; }
+.usb-toolbar .button { min-height:32px; padding:7px 11px; font-size:9px; }
+.usb-drive-label { min-width:0; flex:1; color:#e1ebf8; font-size:11px; font-weight:700; }
+.usb-drive-label small { display:block; color:#7f91aa; font-size:9px; font-weight:400; margin-top:4px; overflow-wrap:anywhere; }
+.usb-search { width:calc(100% - 36px); margin:0 18px 12px; padding:10px 12px; color:#eef4fc; border:1px solid rgba(137,164,199,.22); border-radius:8px; background:#081321; outline:none; }
+.usb-search:focus { border-color:rgba(91,191,218,.65); box-shadow:0 0 0 3px rgba(91,191,218,.1); }
+.usb-list-head { display:grid; grid-template-columns:26px minmax(0,1fr) 90px 80px; gap:8px; padding:9px 18px; color:#6f86a5; border-top:1px solid rgba(137,164,199,.12); border-bottom:1px solid rgba(137,164,199,.12); font:8px "DM Mono",monospace; text-transform:uppercase; letter-spacing:.08em; }
+.usb-file-list { max-height:390px; overflow:auto; padding:5px 10px 10px; }
+.usb-entry { display:grid; grid-template-columns:26px minmax(0,1fr) 90px 80px; align-items:center; gap:8px; width:100%; padding:9px 8px; text-align:left; color:#cbd8e8; border:0; border-bottom:1px solid rgba(137,164,199,.07); background:transparent; cursor:pointer; }
+.usb-entry:hover, .usb-entry:focus-visible { background:rgba(89,154,255,.1); outline:0; }
+.usb-entry-icon { color:#7bc7dd; text-align:center; font-size:13px; }
+.usb-entry-name { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:10px; }
+.usb-entry-type, .usb-entry-size { color:#7e90a9; font:8px "DM Mono",monospace; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.usb-list-empty { margin:0; padding:26px 16px; color:#7f91aa; font-size:10px; text-align:center; }
+.usb-preview-wrap { border-top:1px solid rgba(137,164,199,.12); background:rgba(3,8,16,.42); padding:16px 18px 20px; min-height:150px; }
+.usb-preview-wrap > h3 { margin:0 0 5px; color:#e7effa; font-size:12px; overflow-wrap:anywhere; }
+.usb-preview-meta { margin:0 0 12px; color:#7e90a9; font:8px "DM Mono",monospace; }
+.usb-text-preview { max-height:240px; overflow:auto; margin:0; padding:12px; white-space:pre-wrap; overflow-wrap:anywhere; color:#b9c9de; border:1px solid rgba(137,164,199,.14); border-radius:8px; background:#050c16; font:9px/1.65 "DM Mono",monospace; }
+.usb-image-preview { display:block; max-width:100%; max-height:240px; object-fit:contain; margin:8px auto; border-radius:8px; }
+.usb-preview-empty, .usb-preview-note { color:#899bb2; font-size:10px; line-height:1.7; }
+.usb-run-link { display:inline-flex; margin-top:8px; }
+.usb-download-link { display:inline-flex; margin-top:12px; color:#9fc1ff; font-size:10px; font-weight:700; }
+.usb-side-card { padding:20px; margin-bottom:14px; }
+.usb-side-card h3 { margin:8px 0 7px; font-size:16px; }
+.usb-side-card p { color:#91a1bb; font-size:10px; line-height:1.8; margin:0; }
+.usb-side-card .button { margin-top:14px; }
+.usb-limit-list { padding-left:16px; margin:12px 0 0; color:#91a1bb; font-size:9px; line-height:1.8; }
+.usb-footnote { margin:18px 0 0; padding:13px 15px; border:1px solid rgba(245,185,93,.18); border-radius:10px; background:rgba(245,185,93,.045); color:#c8b28f; font-size:9px; line-height:1.8; }
+@media(max-width:850px){.usb-hero{grid-template-columns:1fr;gap:18px;padding-top:48px}.usb-workspace{grid-template-columns:1fr}.usb-side{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.usb-side-card{margin:0}}
+@media(max-width:560px){.usb-page{padding-top:18px}.usb-hero{padding-top:38px}.usb-list-head,.usb-entry{grid-template-columns:24px minmax(0,1fr) 62px 58px;gap:5px}.usb-list-head{padding-inline:10px}.usb-entry{padding-inline:5px}.usb-entry-name{font-size:9px}.usb-entry-type,.usb-entry-size{font-size:7px}.usb-side{grid-template-columns:1fr}.usb-actions{padding-inline:12px}.usb-toolbar{padding-inline:12px}.usb-status{margin-inline:12px}.usb-search{width:calc(100% - 24px);margin-inline:12px}}
