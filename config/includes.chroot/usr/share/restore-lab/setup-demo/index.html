@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Restore Lab — Setup Preview</title>
+<style>
+:root{color-scheme:dark;font-family:"Segoe UI",Arial,sans-serif;background:#07162d;color:#f5f8ff}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 20%,#174c83 0,#0b2b50 43%,#061326 100%);display:grid;place-items:center;padding:28px}
+.shell{width:min(920px,100%);min-height:570px;background:rgba(6,20,39,.88);border:1px solid rgba(172,207,255,.25);box-shadow:0 30px 100px #0008;border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+.top{height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid #ffffff1b;color:#b9d8fb;font-size:12px;letter-spacing:.13em}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700}.mark{width:16px;height:16px;background:#54aaff;clip-path:polygon(0 8%,100% 0,100% 100%,0 92%)}
+.content{padding:clamp(28px,6vw,64px);flex:1;display:flex;flex-direction:column;justify-content:center}
+.kicker{font-size:12px;color:#73c0ff;letter-spacing:.15em;text-transform:uppercase;margin-bottom:18px}
+h1{font-size:clamp(30px,5vw,48px);font-weight:500;letter-spacing:-.04em;line-height:1.1;margin:0 0 16px}
+p{color:#c6d5e8;line-height:1.7;max-width:660px}
+.versions{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px;margin:28px 0}
+.version{border:1px solid #527ba7;background:#112a47;color:#eaf5ff;border-radius:10px;padding:18px 14px;text-align:left;cursor:pointer}
+.version:hover,.version.active{border-color:#6cc2ff;background:#174475;box-shadow:inset 0 0 0 1px #6cc2ff}
+.version strong{display:block;font-size:17px;margin-bottom:6px}.version small{color:#b8cce1}
+.actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:22px}
+button.primary{background:#1687e6;border:0;color:white;padding:13px 22px;border-radius:7px;font-weight:700;cursor:pointer}
+button.secondary{background:transparent;border:1px solid #708ba8;color:#eaf5ff;padding:12px 18px;border-radius:7px;cursor:pointer}
+button:disabled{opacity:.4;cursor:not-allowed}
+.notice{border-left:3px solid #ffc35c;background:#ffffff0c;padding:14px 16px;color:#d9e5f2;font-size:13px;margin-top:24px}
+.progress{height:5px;background:#183655;border-radius:20px;margin:24px 0 12px;overflow:hidden}.bar{height:100%;width:0;background:#62b8ff;transition:width .4s}
+.steps{display:flex;gap:8px;margin:22px 0}.steps span{height:5px;flex:1;background:#24405e;border-radius:10px}.steps span.done{background:#66bcff}
+.footer{padding:16px 24px;border-top:1px solid #ffffff1b;color:#8ca8c5;font-size:11px;display:flex;justify-content:space-between;gap:12px}
+.hidden{display:none!important}.center{text-align:center;align-items:center}.center p{max-width:560px}
+@media(max-width:550px){body{padding:8px}.shell{min-height:calc(100vh - 16px)}.footer{flex-direction:column}.top{padding:0 14px}}
+</style>
+</head>
+<body>
+<main class="shell">
+<header class="top"><div class="brand"><span class="mark"></span> RESTORE LAB</div><span>SETUP PREVIEW · DEMO MODE</span></header>
+<section class="content" id="page1">
+<div class="kicker">Bootable USB experience</div>
+<h1>Setup preview</h1>
+<p>Choose the Windows generation whose setup style you want to preview. This is a visual simulator running from the Restore Lab USB—not Microsoft Windows Setup.</p>
+<div class="versions">
+<button class="version active" data-name="Windows 11"><strong>Windows 11</strong><small>Modern setup style</small></button>
+<button class="version" data-name="Windows 10"><strong>Windows 10</strong><small>Classic setup style</small></button>
+<button class="version" data-name="Windows 7"><strong>Windows 7</strong><small>Legacy setup style</small></button>
+<button class="version" data-name="Windows Vista"><strong>Windows Vista</strong><small>Legacy setup style</small></button>
+<button class="version" data-name="Windows XP"><strong>Windows XP</strong><small>Classic setup style</small></button>
+</div>
+<div class="notice">DEMO ONLY — No Windows files are included. No partition will be formatted and no files will be installed or changed.</div>
+<div class="actions"><button class="primary" id="next1">Continue preview</button><span style="color:#a9bfd8;font-size:13px">No download of Windows required</span></div>
+</section>
+<section class="content hidden" id="page2">
+<div class="kicker">Selected experience</div><h1 id="selectedTitle">Windows 11 setup preview</h1>
+<p>This screen demonstrates the steps and progress layout of an operating-system setup. It does not connect to a real installer.</p>
+<div class="steps"><span class="done"></span><span class="done"></span><span></span><span></span></div>
+<div class="progress"><div class="bar" id="bar"></div></div><p id="progressText">Preview ready — 0%</p>
+<div class="actions"><button class="primary" id="start">Run visual progress</button><button class="secondary" id="back">Back</button></div>
+</section>
+<section class="content hidden center" id="page3">
+<div class="kicker">Preview complete</div><h1>You're all set.</h1>
+<p>The visual setup demonstration is complete. Nothing was installed, no Windows files were downloaded, and your computer's internal drives were not changed.</p>
+<div class="notice">To use real Windows, obtain genuine installation media from Microsoft. Restore Lab does not create fake Windows installation media.</div>
+<div class="actions"><button class="primary" id="again">Preview another version</button></div>
+</section>
+<footer class="footer"><span>RESTORE LAB • INDEPENDENT DEMONSTRATION</span><span>NO DISK WRITES · NO WINDOWS IMAGE</span></footer>
+</main>
+<script>
+const pages=[document.getElementById('page1'),document.getElementById('page2'),document.getElementById('page3')];
+let chosen='Windows 11',timer=null;
+function show(n){pages.forEach((p,i)=>p.classList.toggle('hidden',i!==n));}
+document.querySelectorAll('.version').forEach(b=>b.addEventListener('click',()=>{
+  chosen=b.dataset.name;document.querySelectorAll('.version').forEach(x=>x.classList.toggle('active',x===b));
+}));
+document.getElementById('next1').addEventListener('click',()=>{
+  document.getElementById('selectedTitle').textContent=chosen+' setup preview';show(1);
+});
+document.getElementById('back').addEventListener('click',()=>show(0));
+document.getElementById('start').addEventListener('click',()=>{
+  const bar=document.getElementById('bar'),label=document.getElementById('progressText'),btn=document.getElementById('start');
+  let n=0;btn.disabled=true;clearInterval(timer);
+  timer=setInterval(()=>{n+=10;bar.style.width=n+'%';label.textContent='Simulated progress — '+n+'%';
+    if(n>=100){clearInterval(timer);setTimeout(()=>show(2),450);}
+  },180);
+});
+document.getElementById('again').addEventListener('click',()=>{document.getElementById('bar').style.width='0';document.getElementById('progressText').textContent='Preview ready — 0%';document.getElementById('start').disabled=false;show(0);});
+</script>
+</body>
+</html>
