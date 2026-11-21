@@ -35,13 +35,10 @@ jobs:
             --binary-images iso-hybrid \
             --archive-areas "main non-free-firmware" \
             --security false \
-            --updates true \
             --apt-recommends false \
             --apt-indices false \
             --firmware-chroot true \
             --firmware-binary false \
-            --chroot-squashfs-compression-type xz \
-            --chroot-squashfs-compression-level 9 \
             --bootappend-live "boot=live components username=restore hostname=restore-lab"
 
       - name: Build live ISO
