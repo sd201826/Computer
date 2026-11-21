@@ -1,49 +1,50 @@
-# Restore Lab — Windows-Style Setup Preview
+# Restore Lab — Installable Live USB
 
-Restore Lab is a website and a cloud-built bootable USB demo. The website is hosted on Cloudflare Pages; GitHub Actions builds the ISO on GitHub's cloud runners. The build does not run on your PC.
+Restore Lab is a Debian-based Linux system with an XFCE desktop, a Windows-inspired visual demo, and a graphical installer. The website is hosted on Cloudflare Pages; GitHub Actions builds the ISO on GitHub's cloud runners. The build does not run on your PC.
 
 Website: https://restore-lab.pages.dev
 
 ## What the USB does
 
-- Boots a small Debian Linux live system on 64-bit PCs.
-- Automatically opens an original, clearly labelled Windows-style setup simulator.
-- Lets you preview Windows 11, Windows 10, Windows 7, Windows Vista and Windows XP setup-inspired screens.
-- Includes Firefox ESR and a file manager.
-- Does not install any operating system, write to internal disks, format partitions, or alter files on the computer.
+- Boots a Debian Trixie live system on 64-bit PCs.
+- Lets you try the live desktop without installing anything.
+- Offers a graphical Calamares installer to install Restore Lab onto a selected internal or external drive.
+- Includes Firefox ESR, a file manager, and Windows-inspired desktop themes.
+- Includes the original Windows-style setup simulator as an optional visual demo.
 
-**This is a fake visual demonstration, not Microsoft Windows.** It does not contain Windows files, Windows drivers, activation, or a real Windows installer. The selected version is only a visual preview. Do not use this ISO as a Windows installation or recovery disk.
+**Restore Lab is NOT Microsoft Windows.** It does not contain Windows installation files, Windows drivers, activation, or a Windows installer. The Windows 11/10/7/Vista/XP screens are only a visual demonstration.
 
-## One ISO, compact target
+## Important installation warning
 
-The workflow produces one bootable hybrid ISO named `Restore-Lab-Setup-Preview-amd64.iso`. It compresses the live filesystem and checks that the final ISO is no larger than 2 GiB. The intended size is around 1–2 GB, but the actual size is only known after a successful build.
+Installing Restore Lab changes the drive you choose. Some partition options can erase the existing operating system and personal files, including Windows. Back up important files first. Read the drive model, size, and partition list carefully. If you are unsure which drive to choose, stop and ask a trusted adult or an experienced technician to help.
 
-## Build in the cloud
+The USB that you booted from is the installation source and should not be selected as the destination. Use the computer's internal SSD/HDD, or a separate spare drive if you are testing. Do not unplug the installer USB while the installer is running.
 
-1. Open the GitHub Actions page.
-2. Choose **Build Restore Lab Setup Preview ISO**.
-3. Wait for the workflow to complete successfully.
-4. The workflow publishes the single ISO and a SHA256 checksum to the [Restore Lab release](https://github.com/sd201826/Computer/releases/tag/restore-lab-live-latest).
+## Create the USB with Rufus
 
-GitHub Actions downloads packages and builds the image remotely. No Node.js, Python, Visual Studio, or local ISO build software is required on your PC.
+1. Download Restore-Lab-Installer-amd64.iso from the [Restore Lab release](https://github.com/sd201826/Computer/releases/tag/restore-lab-live-latest).
+2. Open [Rufus](https://rufus.ie/) on Windows, select the correct USB device, and select the downloaded ISO.
+3. Start writing the image. Rufus erases the selected USB, so copy any files you need before starting.
+4. Restart the PC and use its one-time boot menu to select the USB.
+5. Choose **Install Restore Lab to a selected drive** to open the graphical installer, or choose the live demo to try Restore Lab without installing.
+
+The ISO is intended for BIOS/UEFI boot on 64-bit x86 PCs. Hardware compatibility can vary.
 
 ## Run the live OS in your browser
 
-Open the [Restore Lab Browser VM](https://restore-lab.pages.dev/run.html) and press **Start OS**. It uses the published Debian ISO and an x86-64 WebAssembly emulator. The ISO is streamed on demand, so the full ISO does not need to be downloaded to your PC first.
+Open the [Restore Lab Browser VM](https://restore-lab.pages.dev/run.html) to try the emulated system. Browser virtualization is separate from booting a physical USB and may be slow or incompatible on some devices. The VM does not access your computer's real internal drives or physical USB devices.
 
-The browser VM is a real Debian live session with XFCE, Firefox ESR and the Windows-style setup simulator. It is **not Microsoft Windows**. The VM has a blank 4 GiB virtual hard disk attached. You can also choose a compatible local ISO/IMG file; it is mounted as a virtual CD/DVD, allowing an installer ISO to boot and use that blank virtual disk. The default Restore Lab ISO is a live demo and does not install itself. The VM uses your computer's CPU and 1 GiB of RAM, so close other tabs and apps on low-memory computers.
+## Build in the cloud
 
-The browser VM is isolated from your computer's real internal drives and physical USB devices. A website cannot write a physical USB stick directly. For a real USB, download the ISO and use a desktop USB image writer such as Rufus. Changes to the virtual disk are held only in the current browser session and are cleared when you power off the VM; it is a temporary test disk, not persistent storage.
+1. Open the [GitHub Actions workflow](https://github.com/sd201826/Computer/actions/workflows/build-live-os.yml).
+2. Choose **Build Restore Lab Installer ISO** or use the latest successful run.
+3. The workflow publishes the ISO and a SHA256 checksum to the [Restore Lab release](https://github.com/sd201826/Computer/releases/tag/restore-lab-live-latest).
 
-## Using the ISO
+GitHub Actions downloads packages and builds the image remotely. No Node.js, Python, Visual Studio, or local ISO build software is required on your PC.
 
-To boot the demonstration, download the one ISO from the release page and write it to a USB using a USB image writer such as Rufus. This writing step is done on your PC because a normal website cannot directly access a raw USB drive. Writing the image erases the selected USB, so back up its contents first.
+## Actual Microsoft Windows installation
 
-The ISO is designed for BIOS/UEFI boot on 64-bit x86 PCs. Hardware compatibility can vary.
-
-## Real Windows installation
-
-For an actual Windows installation, use Microsoft's genuine installation media:
+For a real Windows installation, use Microsoft's genuine installation media:
 - [Windows 11](https://www.microsoft.com/software-download/windows11)
 - [Windows 10](https://www.microsoft.com/software-download/windows10)
 
