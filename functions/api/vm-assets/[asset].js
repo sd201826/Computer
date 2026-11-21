@@ -1,7 +1,7 @@
 const BASE_URL = "https://portlandhodl.github.io/v86_64/";
 
 const ASSETS = {
-  "v86_all.js": "build/v86_all.js?98e7110c2",
+  "libv86.js": "build/libv86.js",
   "v86.wasm": "build/v86.wasm",
   "seabios.bin": "bios/seabios.bin",
   "vgabios.bin": "bios/vgabios.bin"
