@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#101c35"/><stop offset=".55" stop-color="#173a60"/><stop offset="1" stop-color="#07111f"/></linearGradient><radialGradient id="r"><stop stop-color="#4bc6d2" stop-opacity=".28"/><stop offset="1" stop-color="#4bc6d2" stop-opacity="0"/></radialGradient></defs>
+<rect width="1920" height="1080" fill="url(#g)"/><circle cx="1460" cy="300" r="650" fill="url(#r)"/><circle cx="300" cy="950" r="520" fill="url(#r)"/>
+<g fill="none" stroke="#8ad9e8" stroke-opacity=".12"><path d="M0 760 Q520 420 980 720 T1920 500" stroke-width="3"/><path d="M0 820 Q520 480 980 780 T1920 560" stroke-width="2"/></g>
+<g transform="translate(150 160)"><rect width="58" height="58" rx="13" fill="#5ac8d2"/><path d="M14 14h13v13H14zm17 0h13v13H31zM14 31h13v13H14zm17 0h13v13H31z" fill="#0d2037"/><text x="82" y="42" fill="#f2f7ff" font-family="Segoe UI,Arial" font-size="40" font-weight="700" letter-spacing="5">RESTORE LAB</text><text x="2" y="126" fill="#d3e5f7" font-family="Segoe UI,Arial" font-size="22" opacity=".7">A fresh start for your computer</text></g>
+</svg>
