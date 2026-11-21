@@ -31,7 +31,7 @@ GitHub Actions downloads packages and builds the image remotely. No Node.js, Pyt
 
 Open the [Restore Lab Browser VM](https://restore-lab.pages.dev/run.html) and press **Start OS**. It uses the same published Debian ISO and an x86-64 WebAssembly emulator. The ISO is streamed on demand, so the full ISO does not need to be downloaded to your PC first.
 
-The browser VM is a real Debian live session with XFCE, Firefox ESR and the Windows-style setup simulator. It is **not Microsoft Windows**. The virtual machine uses your computer's CPU and memory while the tab is open; close other tabs and applications on low-memory computers. The guest has 1 GiB RAM configured. The VM runs separately from your computer's real disks and USB devices. Files created in the live session are temporary and disappear when the VM is powered off.
+The browser VM is a real Debian live session with XFCE, Firefox ESR and the Windows-style setup simulator. It is **not Microsoft Windows**. The virtual machine uses your computer's CPU and memory while the tab is open; close other tabs and applications on low-memory computers. The guest has 1.5 GiB RAM configured. The VM runs separately from your computer's real disks and USB devices. Files created in the live session are temporary and disappear when the VM is powered off.
 
 ## Using the ISO
 
