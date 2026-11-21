@@ -25,7 +25,7 @@
     </a>
     <nav class="main-nav" aria-label="Main navigation">
       <a href="index.html#systems">Systems</a>
-      <a href="index.html#usb">USB & Rufus</a>
+      <a href="#install-media">Install media & disk</a>
       <a href="run.html" aria-current="page">Run OS</a>
       <a href="index.html#restore">Restore guide</a>
     </nav>
@@ -71,6 +71,54 @@
         <button class="button button-outline" id="fullscreenVm" type="button" disabled>Fullscreen</button>
         <button class="button button-danger" id="stopVm" type="button" disabled>Power off</button>
       </div>
+
+      <section class="vm-media-panel" id="install-media" aria-label="Boot media and virtual storage">
+        <div class="vm-media-heading">
+          <div>
+            <span class="section-kicker">VIRTUAL HARDWARE</span>
+            <h2>Boot media & empty disk</h2>
+          </div>
+          <span class="vm-media-tag">ISOLATED VM</span>
+        </div>
+
+        <div class="vm-media-grid">
+          <article class="vm-media-card">
+            <span class="vm-media-label">01 / VIRTUAL CD OR DVD</span>
+            <h3>Choose an installer ISO</h3>
+            <p>Use the Restore Lab demo, or choose an ISO file from your computer. It is attached to the VM as a virtual DVD, not a physical USB stick.</p>
+            <label class="vm-file-picker">
+              <span>Choose ISO / IMG file</span>
+              <input id="isoFile" type="file" accept=".iso,.img,application/x-iso9660-image">
+            </label>
+            <div class="vm-iso-name" id="isoName">Restore Lab demo ISO · 746 MiB</div>
+            <button class="button button-outline vm-clear-iso" id="clearIso" type="button">Use Restore Lab demo ISO</button>
+          </article>
+
+          <article class="vm-media-card">
+            <span class="vm-media-label">02 / VIRTUAL HARD DISK</span>
+            <h3><span class="vm-disk-led"></span> Empty disk · 4 GiB</h3>
+            <p>A blank virtual hard disk is connected as the VM's first hard drive. A compatible installer can create partitions and install to this virtual disk.</p>
+            <div class="vm-disk-spec"><span>Device</span><strong>Virtual IDE / Primary master</strong></div>
+            <div class="vm-disk-spec"><span>Initial state</span><strong>Unpartitioned · 0 bytes used</strong></div>
+            <div class="vm-disk-spec"><span>Host drive access</span><strong>Not connected</strong></div>
+          </article>
+
+          <article class="vm-media-card">
+            <span class="vm-media-label">03 / PHYSICAL USB INSTALL</span>
+            <h3>Make a real bootable USB</h3>
+            <p>This website cannot connect to or write a physical USB drive. Download the ISO to Windows and use Rufus on the PC that has the USB plugged in.</p>
+            <div class="vm-usb-actions">
+              <a class="button button-outline" href="https://github.com/sd201826/Computer/releases/tag/restore-lab-live-latest" target="_blank" rel="noopener">Download ISO ↓</a>
+              <a class="text-link" href="https://rufus.ie/" target="_blank" rel="noopener">Rufus website ↗</a>
+            </div>
+            <small class="vm-usb-warning">Writing an image erases the USB selected in Rufus. Back up its files first.</small>
+          </article>
+        </div>
+
+        <div class="vm-media-note">
+          <strong>Important:</strong> The built-in Restore Lab ISO starts a Debian live demo; it does not install itself. To install another system, choose a compatible installer ISO. Any changes made to this 4 GiB virtual disk stay only in the current browser session and are cleared when you power off.
+        </div>
+      </section>
 
       <div class="vm-foot">
         <span id="vmDetail">The virtual machine has not started.</span>
