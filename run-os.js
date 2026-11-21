@@ -11,8 +11,16 @@
   const fullscreenButton = document.getElementById("fullscreenVm");
   const stopButton = document.getElementById("stopVm");
 
+  const isoInput = document.getElementById("isoFile");
+  const isoName = document.getElementById("isoName");
+  const clearIsoButton = document.getElementById("clearIso");
+
+  const ISO_SIZE = 782237696;
+  const VIRTUAL_DISK_SIZE = 4 * 1024 * 1024 * 1024;
+
   let emulator = null;
   let enginePromise = null;
+  let selectedIsoFile = null;
 
   document.getElementById("year").textContent = new Date().getFullYear();
 
@@ -22,50 +30,79 @@
     statusBox.classList.toggle("is-error", mode === "error");
   }
 
-  function setControls(running) {
-    pauseButton.disabled = !emulator;
-    restartButton.disabled = !emulator;
-    fullscreenButton.disabled = !emulator;
-    stopButton.disabled = !emulator;
-    pauseButton.textContent = running ? "Pause" : "Resume";
-    startButton.disabled = Boolean(emulator);
+  function setControls() {
+    const active = Boolean(emulator);
+    pauseButton.disabled = !active;
+    restartButton.disabled = !active;
+    fullscreenButton.disabled = !active;
+    stopButton.disabled = !active;
+    isoInput.disabled = active;
+    clearIsoButton.disabled = active;
+    startButton.disabled = active;
+  }
+
+  function showSelectedIso(file) {
+    selectedIsoFile = file || null;
+    if (selectedIsoFile) {
+      isoName.textContent = selectedIsoFile.name + " · " +
+        (selectedIsoFile.size / (1024 * 1024)).toFixed(1) + " MiB";
+      detail.textContent = "Selected ISO will be attached as a virtual CD/DVD on the next start.";
+    } else {
+      isoName.textContent = "Restore Lab demo ISO · 746 MiB";
+      detail.textContent = "The Restore Lab demo ISO will boot from the virtual CD/DVD.";
+    }
   }
 
   function loadEngine() {
-    if (window.V86) return Promise.resolve();
+    if (typeof window.V86 === "function") return Promise.resolve();
     if (enginePromise) return enginePromise;
 
     enginePromise = new Promise((resolve, reject) => {
       const script = document.createElement("script");
-      script.src = "/api/vm-assets/v86_all.js";
+      script.src = "/api/vm-assets/libv86.js";
       script.async = true;
       script.onload = () => {
         if (typeof window.V86 === "function") {
           resolve();
         } else {
-          reject(new Error("The emulator library loaded, but its V86 interface was not found."));
+          enginePromise = null;
+          reject(new Error("The v86 library loaded, but its V86 constructor was not exposed."));
         }
       };
-      script.onerror = () => reject(new Error("Could not load the browser emulator. Check your connection and try again."));
+      script.onerror = () => {
+        enginePromise = null;
+        reject(new Error("Could not load the VM engine. Refresh the page and try again."));
+      };
       document.head.appendChild(script);
     });
 
     return enginePromise;
   }
 
+  function selectedBootMedia() {
+    if (selectedIsoFile) {
+      return { buffer: selectedIsoFile, async: true };
+    }
+    return {
+      url: "/api/restore-lab-iso",
+      size: ISO_SIZE,
+      async: true
+    };
+  }
+
   async function startVm() {
     if (emulator) return;
 
     startButton.disabled = true;
-    setStatus("Loading the browser virtual PC engine…", "busy");
-    detail.textContent = "Loading the emulator engine and firmware.";
+    setStatus("Loading the VM engine…", "busy");
+    detail.textContent = "Loading the browser emulator library.";
     placeholder.hidden = false;
 
     try {
       await loadEngine();
 
-      setStatus("Starting the virtual computer…", "busy");
-      detail.textContent = "The Debian ISO is streamed from the Restore Lab release as the virtual PC reads it.";
+      setStatus("Creating the virtual PC…", "busy");
+      detail.textContent = "Attaching the boot ISO and a new blank 4 GiB virtual hard disk.";
 
       emulator = new window.V86({
         wasm_path: "/api/vm-assets/v86.wasm",
@@ -74,7 +111,16 @@
         screen_container: screenContainer,
         bios: { url: "/api/vm-assets/seabios.bin" },
         vga_bios: { url: "/api/vm-assets/vgabios.bin" },
-        cdrom: { url: "/api/restore-lab-iso", async: true, size: 782237696 },
+        cdrom: selectedBootMedia(),
+        hda: {
+          url: "/api/blank-disk",
+          size: VIRTUAL_DISK_SIZE,
+          async: true
+        },
+        fdc: {
+          fda: { drive_type: 0 },
+          fdb: { drive_type: 0 }
+        },
         boot_order: 0x123,
         acpi: true,
         disable_speaker: true,
@@ -83,26 +129,26 @@
 
       emulator.add_listener("emulator-ready", () => {
         placeholder.hidden = true;
-        setStatus("Virtual PC ready — booting Debian…", "busy");
-        detail.textContent = "Firmware loaded. Waiting for the Debian live system to start.";
+        setStatus("Virtual PC ready — starting boot…", "busy");
+        detail.textContent = "The virtual CD/DVD and blank 4 GiB hard disk are connected.";
       });
 
       emulator.add_listener("emulator-started", () => {
         placeholder.hidden = true;
-        setStatus("Restore Lab is running", "ready");
-        detail.textContent = "Click the virtual screen to send keyboard and mouse input.";
-        setControls(true);
+        setStatus("Virtual PC is running", "ready");
+        detail.textContent = "Click inside the virtual screen to use the keyboard and mouse.";
+        setControls();
       });
 
       emulator.add_listener("emulator-stopped", () => {
         if (emulator) {
           setStatus("Virtual PC paused", "ready");
-          setControls(false);
+          setControls();
         }
       });
 
       emulator.add_listener("ide-read-start", () => {
-        detail.textContent = "Reading the live ISO from the release server…";
+        detail.textContent = "Reading boot media…";
       });
 
       emulator.add_listener("download-progress", (event) => {
@@ -113,16 +159,16 @@
       });
 
       emulator.add_listener("download-error", (event) => {
-        const name = event && event.file_name ? event.file_name : "a virtual machine file";
-        setStatus("A VM file could not be loaded", "error");
-        detail.textContent = "Failed to load " + name + ". Check the network and refresh this page.";
+        const name = event && event.file_name ? event.file_name : "a VM image";
+        setStatus("Could not load VM media", "error");
+        detail.textContent = "Failed to load " + name + ". Check the connection, then power off and retry.";
       });
 
-      setControls(true);
+      setControls();
       screenContainer.focus();
     } catch (error) {
       emulator = null;
-      setControls(false);
+      setControls();
       setStatus("Could not start the virtual PC", "error");
       detail.textContent = error && error.message ? error.message : "An unexpected error occurred.";
       startButton.disabled = false;
@@ -131,19 +177,20 @@
 
   async function togglePause() {
     if (!emulator) return;
+
     try {
       if (emulator.is_running()) {
         await emulator.stop();
         pauseButton.textContent = "Resume";
         setStatus("Virtual PC paused", "ready");
-        detail.textContent = "The guest is paused. Press Resume to continue.";
-        setControls(false);
+        detail.textContent = "The VM is paused. Press Resume to continue.";
       } else {
         await emulator.run();
         pauseButton.textContent = "Pause";
-        setStatus("Restore Lab is running", "ready");
-        setControls(true);
+        setStatus("Virtual PC is running", "ready");
+        detail.textContent = "Click inside the virtual screen to use the keyboard and mouse.";
       }
+      setControls();
     } catch (error) {
       setStatus("Unable to change VM state", "error");
       detail.textContent = error && error.message ? error.message : "The VM control failed.";
@@ -152,37 +199,62 @@
 
   async function stopVm() {
     if (!emulator) return;
+
     const current = emulator;
     emulator = null;
     setStatus("Powering off the virtual PC…", "busy");
-    detail.textContent = "Closing the temporary live session.";
+    detail.textContent = "Closing the temporary virtual session.";
 
     try {
       await current.stop();
       await current.destroy();
     } catch (error) {
-      // The emulator may already have stopped while the browser was closing it.
+      // The VM may already have stopped while the browser was closing it.
     }
 
     screenContainer.querySelectorAll("canvas").forEach((canvas) => {
-      if (canvas.id === "vga") canvas.getContext("2d")?.clearRect(0, 0, canvas.width, canvas.height);
+      if (canvas.id === "vga") {
+        canvas.getContext("2d")?.clearRect(0, 0, canvas.width, canvas.height);
+      }
     });
+
     placeholder.hidden = false;
     setStatus("Virtual PC powered off", "ready");
-    detail.textContent = "The temporary session has ended. Start OS to boot it again.";
-    setControls(false);
-    startButton.disabled = false;
+    detail.textContent = "The session ended. The blank virtual disk resets when you power off.";
+    setControls();
   }
+
+  isoInput.addEventListener("change", () => {
+    const file = isoInput.files && isoInput.files[0];
+    if (file && !/\.(iso|img)$/i.test(file.name)) {
+      isoInput.value = "";
+      showSelectedIso(null);
+      setStatus("Choose an ISO or IMG file", "error");
+      detail.textContent = "Select a bootable .iso or .img file.";
+      return;
+    }
+    showSelectedIso(file);
+    setStatus(file ? "Custom installer media selected" : "Ready — press Start OS", "ready");
+  });
+
+  clearIsoButton.addEventListener("click", () => {
+    isoInput.value = "";
+    showSelectedIso(null);
+    setStatus("Using Restore Lab demo media", "ready");
+  });
 
   startButton.addEventListener("click", startVm);
   pauseButton.addEventListener("click", togglePause);
+  stopButton.addEventListener("click", stopVm);
+
   restartButton.addEventListener("click", () => {
     if (!emulator) return;
     emulator.restart();
     pauseButton.textContent = "Pause";
-    setStatus("Restarting Restore Lab…", "busy");
-    detail.textContent = "The virtual PC is rebooting from the live ISO.";
+    setStatus("Restarting the virtual PC…", "busy");
+    detail.textContent = "The computer is rebooting from the virtual CD/DVD.";
   });
+
   fullscreenButton.addEventListener("click", async () => {
     try {
       await screenContainer.requestFullscreen();
@@ -190,7 +262,7 @@
       setStatus("Fullscreen is unavailable in this browser", "error");
     }
   });
-  stopButton.addEventListener("click", stopVm);
 
-  setControls(false);
+  showSelectedIso(null);
+  setControls();
 })();
