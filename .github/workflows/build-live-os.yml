@@ -1,4 +1,4 @@
-name: Build Restore Lab Setup Preview ISO
+name: Build Restore Lab Installer ISO
 
 on:
   push:
@@ -23,7 +23,7 @@ jobs:
       - name: Check Docker availability
         run: docker --version
 
-      - name: Build live ISO with matching Debian Trixie tools
+      - name: Build installable live ISO with matching Debian Trixie tools
         run: |
           docker run --privileged --rm \
             --volume "${GITHUB_WORKSPACE}:/workspace" \
@@ -77,37 +77,38 @@ jobs:
               lb build
 
               test -s live-image-amd64.hybrid.iso
-              cp live-image-amd64.hybrid.iso dist/Restore-Lab-Setup-Preview-amd64.iso
+              cp live-image-amd64.hybrid.iso dist/Restore-Lab-Installer-amd64.iso
 
-              SIZE_BYTES="$(stat -c%s dist/Restore-Lab-Setup-Preview-amd64.iso)"
+              SIZE_BYTES="$(stat -c%s dist/Restore-Lab-Installer-amd64.iso)"
               SIZE_MIB="$((SIZE_BYTES / 1024 / 1024))"
-              echo "ISO size: ${SIZE_MIB} MiB"
+              echo "Installer ISO size: ${SIZE_MIB} MiB"
               if [ "$SIZE_BYTES" -gt 2147483648 ]; then
                 echo "::error::ISO is larger than the 2 GiB target. Reduce the package set before publishing."
                 exit 1
               fi
 
-              sha256sum dist/Restore-Lab-Setup-Preview-amd64.iso | tee dist/SHA256SUMS.txt
+              sha256sum dist/Restore-Lab-Installer-amd64.iso | tee dist/SHA256SUMS.txt
             '
 
-      - name: Upload ISO artifact
+      - name: Upload installer ISO artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Restore-Lab-Setup-Preview-amd64
+          name: Restore-Lab-Installer-amd64
           path: |
-            dist/Restore-Lab-Setup-Preview-amd64.iso
+            dist/Restore-Lab-Installer-amd64.iso
             dist/SHA256SUMS.txt
           if-no-files-found: error
           retention-days: 14
 
-      - name: Publish setup preview ISO
+      - name: Publish installable ISO
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          NOTES="Restore Lab Setup Preview is a compact Debian Linux live USB that opens an original Windows-style setup simulator. It is NOT Microsoft Windows and contains no Windows installation files. The simulator does not install, repair, activate or modify any internal disk. Target size: no more than 2 GiB."
+          NOTES="Restore Lab is a Debian-based Linux live USB with a graphical Calamares installer. Boot the USB and choose Install Restore Lab to install the Linux system to a selected drive. It is NOT Microsoft Windows and contains no Windows installation files. Installing to a drive can erase its contents, including an existing Windows installation; back up first and inspect the target drive carefully."
           if gh release view restore-lab-live-latest >/dev/null 2>&1; then
-            gh release upload restore-lab-live-latest dist/Restore-Lab-Setup-Preview-amd64.iso dist/SHA256SUMS.txt --clobber
-            gh release edit restore-lab-live-latest --title "Restore Lab Setup Preview (Demo ISO)" --notes "$NOTES"
+            gh release delete-asset restore-lab-live-latest Restore-Lab-Setup-Preview-amd64.iso --yes || true
+            gh release upload restore-lab-live-latest dist/Restore-Lab-Installer-amd64.iso dist/SHA256SUMS.txt --clobber
+            gh release edit restore-lab-live-latest --title "Restore Lab Installer (Debian-based live USB)" --notes "$NOTES"
           else
-            gh release create restore-lab-live-latest dist/Restore-Lab-Setup-Preview-amd64.iso dist/SHA256SUMS.txt --title "Restore Lab Setup Preview (Demo ISO)" --notes "$NOTES"
+            gh release create restore-lab-live-latest dist/Restore-Lab-Installer-amd64.iso dist/SHA256SUMS.txt --title "Restore Lab Installer (Debian-based live USB)" --notes "$NOTES"
           fi
