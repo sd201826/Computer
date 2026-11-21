@@ -16,6 +16,19 @@ Categories=System;
 EOF
 chmod 755 /etc/skel/Desktop/Start-Setup-Preview.desktop
 
+cat > /etc/skel/Desktop/Install-Restore-Lab.desktop <<'EOF'
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Install Restore Lab
+Comment=Install the Debian-based Restore Lab system onto a selected drive
+Exec=calamares-install-debian
+Icon=install-debian
+Terminal=false
+Categories=System;
+EOF
+chmod 755 /etc/skel/Desktop/Install-Restore-Lab.desktop
+
 cat > /etc/skel/Desktop/Firefox.desktop <<'EOF'
 [Desktop Entry]
 Version=1.0
@@ -46,6 +59,38 @@ cat > /usr/local/bin/restore-setup-demo <<'EOF'
 exec firefox-esr --kiosk file:///usr/share/restore-lab/setup-demo/index.html
 EOF
 chmod 755 /usr/local/bin/restore-setup-demo
+
+cat > /usr/local/bin/restore-welcome <<'EOF'
+#!/bin/sh
+set -eu
+
+choice="$(zenity --list --radiolist \
+  --title='Welcome to Restore Lab' \
+  --text='Choose what you want to do. The live demo does not install or change your disks.' \
+  --column='Select' --column='Action' \
+  TRUE 'Try the live setup demo' \
+  FALSE 'Install Restore Lab to a selected drive' \
+  FALSE 'Use the live desktop only' \
+  --width=560 --height=300 2>/dev/null)" || exit 0
+
+case "$choice" in
+  'Try the live setup demo')
+    exec /usr/local/bin/restore-setup-demo
+    ;;
+  'Install Restore Lab to a selected drive')
+    if zenity --question \
+      --title='Before installing Restore Lab' \
+      --text='This installs a Debian-based Linux system. It is NOT Microsoft Windows. The installer will let you choose a drive and partitions. Some choices can erase Windows and personal files. Back up important files first, and ask a trusted adult for help if you are unsure. Continue to the installer?' \
+      --ok-label='Open installer' --cancel-label='Go back' 2>/dev/null; then
+      exec calamares-install-debian
+    fi
+    ;;
+  'Use the live desktop only')
+    exit 0
+    ;;
+esac
+EOF
+chmod 755 /usr/local/bin/restore-welcome
 
 cat > /usr/local/bin/restore-theme <<'EOF'
 #!/bin/sh
@@ -78,23 +123,28 @@ EOF
 cat > /etc/skel/.config/autostart/restore-setup-demo.desktop <<'EOF'
 [Desktop Entry]
 Type=Application
-Name=Restore Lab Setup Preview
-Exec=/usr/local/bin/restore-setup-demo
+Name=Restore Lab Welcome
+Exec=/usr/local/bin/restore-welcome
 OnlyShowIn=XFCE;
 X-GNOME-Autostart-enabled=true
 EOF
 
 cat > /usr/share/restore-lab/ABOUT.txt <<'EOF'
-RESTORE LAB SETUP PREVIEW
+RESTORE LAB — INSTALLABLE LIVE SYSTEM
 
-This is a compact Debian Linux live system that opens a Windows-style setup simulator.
-It is NOT Microsoft Windows and does NOT contain Windows installation files.
-The setup preview is a visual demonstration only. It cannot install, repair, activate,
-or recover Windows and it does not modify internal disks.
+Restore Lab is based on Debian GNU/Linux and includes the XFCE desktop.
+The live USB can run without installing. Choose "Install Restore Lab" to
+open the graphical Calamares installer and install the system to a selected
+internal or external drive.
 
-A Firefox browser and file manager are included. The desktop-style picker changes
-Linux themes only. Boot this USB to try the demo; no internal-disk installation is
-required or provided.
+IMPORTANT:
+- This is NOT Microsoft Windows and contains no Windows installation files.
+- The live demo is visual only and does not modify disks.
+- Installing to a drive can erase its files, including Windows. Back up first.
+- Read every partition and target-drive screen carefully before confirming.
+- Do not remove the USB installer while the system is installing.
+
+The Windows-inspired desktop styles change Linux themes only.
 EOF
 
 # Remove downloaded package archives and index caches from the final live filesystem.
