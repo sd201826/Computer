@@ -37,7 +37,7 @@ jobs:
             --security false \
             --apt-recommends false \
             --apt-indices false \
-            --firmware-chroot true \
+            --firmware-chroot false \
             --firmware-binary false \
             --bootappend-live "boot=live components username=restore hostname=restore-lab"
 
