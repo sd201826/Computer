@@ -154,3 +154,21 @@ h1 { margin: 22px 0 18px; font-size: clamp(42px, 5.6vw, 68px); line-height: 1.06
   .version-tag { display: none; }.system-grid { gap: 8px; }.system-card { padding: 12px; min-height: 145px; }.system-bottom { font-size: 7px; }
   .restore-grid { grid-template-columns: 1fr; }.hero-actions .button { width: 100%; }
 }
+
+
+.live-os-card { display:grid; grid-template-columns:1.08fr .92fr; align-items:center; gap:38px; padding:38px; border:1px solid rgba(100,227,223,.25); border-radius:18px; background:radial-gradient(circle at 100% 0,rgba(50,160,174,.14),transparent 42%),linear-gradient(130deg,#12243a,#0d1929); overflow:hidden; }
+.live-os-copy h2 { margin:0; font-size:clamp(27px,3vw,37px); line-height:1.15; letter-spacing:-.05em; }
+.live-os-copy > p { max-width:490px; color:#91a1bb; font-size:10px; line-height:1.9; margin-top:13px; }
+.live-feature-list { display:grid; grid-template-columns:1fr 1fr; gap:10px 14px; margin-top:20px; color:#b7c9df; font-size:9px; }
+.live-feature-list span::first-letter { color:var(--green); }
+.live-os-preview { min-width:0; }
+.desktop-window { min-height:250px; position:relative; overflow:hidden; border:1px solid rgba(130,187,224,.45); border-radius:11px; background:radial-gradient(circle at 80% 15%,rgba(89,198,210,.45),transparent 40%),linear-gradient(140deg,#18395d,#0b1628 75%); box-shadow:0 20px 55px rgba(0,0,0,.3); }
+.desktop-titlebar { height:31px; display:flex; align-items:center; justify-content:space-between; padding:0 12px; background:rgba(8,16,29,.8); color:#d8e9fb; font:8px "DM Mono",monospace; letter-spacing:.08em; }
+.desktop-icons { display:grid; grid-template-columns:repeat(2,54px); gap:22px; padding:26px 20px 70px; }
+.desktop-icons div { display:flex; flex-direction:column; align-items:center; gap:5px; color:#e4efff; font-size:8px; text-shadow:0 1px 4px #07101d; }
+.desktop-icons b { width:33px; height:33px; display:grid; place-items:center; border:1px solid rgba(200,229,255,.3); border-radius:9px; background:rgba(19,54,82,.7); color:#83e2df; font-size:18px; }
+.desktop-taskbar { position:absolute; bottom:0; left:0; right:0; height:34px; display:flex; align-items:center; gap:14px; padding:0 12px; background:rgba(8,15,27,.9); color:#c8d8eb; font-size:8px; }
+.desktop-taskbar > span:first-child { color:#78e0d7; font-size:14px; }.taskbar-clock { margin-left:auto; color:#8fa5c1; font:7px "DM Mono",monospace; }
+.theme-note { margin-top:11px; color:#8298b5; font:8px "DM Mono",monospace; text-align:center; letter-spacing:.06em; }
+@media (max-width:900px) { .live-os-card { gap:24px; padding:28px; } }
+@media (max-width:680px) { .live-os-card { grid-template-columns:1fr; padding:23px; } .live-feature-list { grid-template-columns:1fr; } }
