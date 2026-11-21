@@ -23,12 +23,12 @@ jobs:
       - name: Install Debian live-build tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y live-build debootstrap squashfs-tools xorriso             grub-pc-bin grub-efi-amd64-bin mtools
+          sudo apt-get install -y live-build debootstrap debian-archive-keyring squashfs-tools xorriso grub-pc-bin grub-efi-amd64-bin mtools
 
       - name: Configure live image
         run: |
           chmod +x config/hooks/live/*.hook.chroot
-          sudo lb config             --distribution trixie             --architectures amd64             --binary-images iso-hybrid             --archive-areas "main contrib non-free non-free-firmware"             --bootappend-live "boot=live components username=restore hostname=restore-lab"
+          sudo lb config             --mode debian             --distribution trixie             --architectures amd64             --binary-images iso-hybrid             --archive-areas "main contrib non-free non-free-firmware"             --bootappend-live "boot=live components username=restore hostname=restore-lab"
 
       - name: Build live ISO
         run: |
