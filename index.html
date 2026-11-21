@@ -35,7 +35,7 @@
       <div class="hero-copy">
         <div class="eyebrow"><span class="pulse-dot"></span> PC RECOVERY WORKSPACE <span class="eyebrow-line"></span> v1.0</div>
         <h1>Give your old PC<br><span class="gradient-text">another start.</span></h1>
-        <p class="hero-lead">Boot the Debian-based Restore Lab installer from a Rufus-made USB. Try it live or install Restore Lab to a selected drive. The Windows-style screens are an optional demo — not Microsoft Windows.</p>
+        <p class="hero-lead">Run the same Debian-based Restore Lab installer in the website's virtual PC, or download that exact ISO and use Rufus to boot your real PC from USB. The Windows-style screens are an optional demo — not Microsoft Windows.</p>
         <div class="hero-actions">
           <a class="button button-primary" href="run.html">Run OS in browser <span aria-hidden="true">→</span></a>
           <a class="button button-quiet" href="#systems">Explore Windows versions</a>
@@ -134,9 +134,9 @@
           <div class="section-kicker">02 / INSTALLABLE LIVE USB</div>
           <div class="demo-label"><span></span> WINDOWS-STYLE SETUP SIMULATOR</div>
           <h2>Boot the live system.<br>Or install it.</h2>
-          <p>Boot Restore Lab from a Rufus-made USB. Choose the live desktop to try it without installing, or open the Calamares installer to install the Debian-based system onto a selected drive. The Windows-style setup simulator is an optional visual demo.</p>
+          <p>The website streams this same published ISO into a virtual PC as a DVD. Or download Restore-Lab-Installer-amd64.iso and write it to a USB with Rufus. On a real PC, boot the USB to try the live desktop or open Calamares to install Debian-based Restore Lab to a selected drive.</p>
           <div class="live-feature-list">
-            <span>✓ Bootable installer ISO</span><span>✓ Graphical Calamares installer</span>
+            <span>✓ Same ISO for website + USB</span><span>✓ Graphical Calamares installer</span>
             <span>✓ Built by GitHub in the cloud</span><span>✓ Optional live demo — no install required</span>
           </div>
           <div class="simulator-actions">
@@ -144,11 +144,11 @@
             <a class="button button-outline" href="https://github.com/sd201826/Computer/releases/tag/restore-lab-live-latest" target="_blank" rel="noopener">Download ISO <span aria-hidden="true">↓</span></a>
             <a class="text-link" href="https://github.com/sd201826/Computer/actions/workflows/build-live-os.yml" target="_blank" rel="noopener">Check cloud build ↗</a>
           </div>
-          <div class="simulator-warning"><span>!</span> This runs Debian Linux in a browser VM. The Windows-style setup screens are a simulator, not Windows. The VM does not access or modify your computer’s real disks.</div>
+          <div class="simulator-warning"><span>!</span> The website streams the same ISO into a virtual DVD and uses a temporary virtual disk. Rufus writes that same ISO to your real USB. The browser never accesses your real disks or physical USB.</div>
         </div>
         <div class="live-os-preview">
           <div class="setup-preview-screen">
-            <div class="setup-preview-header"><span class="setup-preview-mark"></span><span>RESTORE LAB</span><b>DEMO MODE</b></div>
+            <div class="setup-preview-header"><span class="setup-preview-mark"></span><span>RESTORE LAB</span><b>LIVE + INSTALL</b></div>
             <div class="setup-preview-body">
               <small>BOOTABLE USB EXPERIENCE</small>
               <strong>Setup preview</strong>
@@ -158,7 +158,7 @@
             </div>
             <div class="setup-preview-footer">NO WINDOWS FILES · NO DISK WRITES</div>
           </div>
-          <div class="theme-note">Optional visual simulator — the installer installs Debian-based Restore Lab, not Windows.</div>
+          <div class="theme-note">The browser preview and Rufus USB use the same installer ISO. The installer installs Debian-based Restore Lab, not Windows.</div>
         </div>
       </div>
     </section>
