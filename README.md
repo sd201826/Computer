@@ -29,9 +29,11 @@ GitHub Actions downloads packages and builds the image remotely. No Node.js, Pyt
 
 ## Run the live OS in your browser
 
-Open the [Restore Lab Browser VM](https://restore-lab.pages.dev/run.html) and press **Start OS**. It uses the same published Debian ISO and an x86-64 WebAssembly emulator. The ISO is streamed on demand, so the full ISO does not need to be downloaded to your PC first.
+Open the [Restore Lab Browser VM](https://restore-lab.pages.dev/run.html) and press **Start OS**. It uses the published Debian ISO and an x86-64 WebAssembly emulator. The ISO is streamed on demand, so the full ISO does not need to be downloaded to your PC first.
 
-The browser VM is a real Debian live session with XFCE, Firefox ESR and the Windows-style setup simulator. It is **not Microsoft Windows**. The virtual machine uses your computer's CPU and memory while the tab is open; close other tabs and applications on low-memory computers. The guest has 1 GiB RAM configured. The VM runs separately from your computer's real disks and USB devices. Files created in the live session are temporary and disappear when the VM is powered off.
+The browser VM is a real Debian live session with XFCE, Firefox ESR and the Windows-style setup simulator. It is **not Microsoft Windows**. The VM has a blank 4 GiB virtual hard disk attached. You can also choose a compatible local ISO/IMG file; it is mounted as a virtual CD/DVD, allowing an installer ISO to boot and use that blank virtual disk. The default Restore Lab ISO is a live demo and does not install itself. The VM uses your computer's CPU and 1 GiB of RAM, so close other tabs and apps on low-memory computers.
+
+The browser VM is isolated from your computer's real internal drives and physical USB devices. A website cannot write a physical USB stick directly. For a real USB, download the ISO and use a desktop USB image writer such as Rufus. Changes to the virtual disk are held only in the current browser session and are cleared when you power off the VM; it is a temporary test disk, not persistent storage.
 
 ## Using the ISO
 
