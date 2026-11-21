@@ -15,7 +15,7 @@
   const isoName = document.getElementById("isoName");
   const clearIsoButton = document.getElementById("clearIso");
 
-  const VIRTUAL_DISK_SIZE = 4 * 1024 * 1024 * 1024;
+  const VIRTUAL_DISK_SIZE = 16 * 1024 * 1024 * 1024;
 
   let emulator = null;
   let enginePromise = null;
@@ -45,10 +45,10 @@
     if (selectedIsoFile) {
       isoName.textContent = selectedIsoFile.name + " · " +
         (selectedIsoFile.size / (1024 * 1024)).toFixed(1) + " MiB";
-      detail.textContent = "Selected ISO will be attached as a virtual CD/DVD on the next start.";
+      detail.textContent = "Your chosen ISO will be attached as a virtual DVD in this browser VM on the next start.";
     } else {
       isoName.textContent = "Restore Lab installer ISO · size checked at start";
-      detail.textContent = "The Restore Lab installer ISO will boot from the virtual CD/DVD. Use Rufus for a physical USB.";
+      detail.textContent = "The same Restore-Lab-Installer-amd64.iso used by Rufus is streamed here as a virtual DVD.";
     }
   }
 
@@ -117,7 +117,7 @@
 
       const remoteIsoSize = selectedIsoFile ? null : await getRemoteIsoSize();
       setStatus("Creating the virtual PC…", "busy");
-      detail.textContent = "Attaching the boot ISO and a new blank 4 GiB virtual hard disk.";
+      detail.textContent = "Attaching the same published installer ISO and a blank 16 GiB virtual hard disk.";
 
       emulator = new window.V86({
         wasm_path: "/api/vm-assets/v86.wasm",
@@ -145,7 +145,7 @@
       emulator.add_listener("emulator-ready", () => {
         placeholder.hidden = true;
         setStatus("Virtual PC ready — starting boot…", "busy");
-        detail.textContent = "The virtual CD/DVD and blank 4 GiB hard disk are connected.";
+        detail.textContent = "The published installer ISO is connected as a virtual DVD, with a temporary 16 GiB virtual hard disk.";
       });
 
       emulator.add_listener("emulator-started", () => {
@@ -235,7 +235,7 @@
 
     placeholder.hidden = false;
     setStatus("Virtual PC powered off", "ready");
-    detail.textContent = "The session ended. The blank virtual disk resets when you power off.";
+    detail.textContent = "The session ended. The temporary 16 GiB virtual disk is cleared when you power off.";
     setControls();
   }
 
@@ -255,7 +255,7 @@
   clearIsoButton.addEventListener("click", () => {
     isoInput.value = "";
     showSelectedIso(null);
-    setStatus("Using Restore Lab installer media", "ready");
+    setStatus("Using the same online installer ISO", "ready");
   });
 
   startButton.addEventListener("click", startVm);
