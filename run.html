@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1220">
+  <meta name="description" content="Run the Restore Lab Debian live system in a browser-based virtual PC.">
+  <title>Run Restore Lab — Browser Virtual PC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="run-os.css">
+  <script src="run-os.js" defer></script>
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="Restore Lab home">
+      <span class="brand-mark"><span></span><span></span><span></span><span></span></span>
+      <span>RESTORE<span class="brand-light">LAB</span></span>
+      <span class="version-tag">BROWSER VM</span>
+    </a>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="index.html#systems">Systems</a>
+      <a href="index.html#usb">USB & Rufus</a>
+      <a href="run.html" aria-current="page">Run OS</a>
+      <a href="index.html#restore">Restore guide</a>
+    </nav>
+    <a class="top-action" href="https://github.com/sd201826/Computer" target="_blank" rel="noopener">View source <span aria-hidden="true">↗</span></a>
+  </header>
+
+  <main class="run-page shell">
+    <a class="run-back" href="index.html">← Back to Restore Lab</a>
+
+    <section class="run-heading">
+      <div class="eyebrow"><span class="pulse-dot"></span> RESTORE LAB / BROWSER VIRTUAL PC <span class="eyebrow-line"></span> LIVE SESSION</div>
+      <h1>Run the OS <span class="gradient-text">in your browser.</span></h1>
+      <p class="run-lead">Start the actual Debian-based Restore Lab live system inside an emulated x86-64 PC. The browser streams the ISO as it boots, so you do not need to download the ISO or write a USB to try it.</p>
+    </section>
+
+    <section class="vm-panel" aria-label="Restore Lab virtual computer">
+      <div class="vm-toolbar">
+        <div class="vm-title">
+          <span class="vm-led"></span>
+          <div><strong>RESTORE LAB VIRTUAL PC</strong><small>Debian Trixie · XFCE · Windows-style setup demo</small></div>
+        </div>
+        <div class="vm-status" id="vmStatus" role="status" aria-live="polite">
+          <span class="vm-status-dot"></span><span id="vmStatusText">Ready — press Start OS</span>
+        </div>
+      </div>
+
+      <div class="vm-screen-wrap">
+        <div id="screen_container" tabindex="0" aria-label="Virtual computer screen">
+          <div id="screen"></div>
+          <canvas id="vga"></canvas>
+          <div class="vm-screen-placeholder" id="vmScreenPlaceholder">
+            <div class="vm-power-symbol">⏻</div>
+            <strong>Virtual PC is powered off</strong>
+            <span>Press Start OS below to boot Restore Lab.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="vm-controls">
+        <button class="button button-primary" id="startVm" type="button">▶ Start OS</button>
+        <button class="button button-outline" id="pauseVm" type="button" disabled>Pause</button>
+        <button class="button button-outline" id="restartVm" type="button" disabled>Restart</button>
+        <button class="button button-outline" id="fullscreenVm" type="button" disabled>Fullscreen</button>
+        <button class="button button-danger" id="stopVm" type="button" disabled>Power off</button>
+      </div>
+
+      <div class="vm-foot">
+        <span id="vmDetail">The virtual machine has not started.</span>
+        <span>Guest memory: 1 GB · Video memory: 16 MB</span>
+      </div>
+    </section>
+
+    <section class="run-info-grid">
+      <article class="run-info-card">
+        <span class="section-kicker">WHAT YOU ARE RUNNING</span>
+        <h2>A real Linux live session</h2>
+        <p>This boots your successful Restore Lab ISO: Debian Linux with XFCE, Firefox ESR and the Windows-inspired setup preview. The setup screens are a simulator, not Microsoft Windows.</p>
+      </article>
+      <article class="run-info-card">
+        <span class="section-kicker">BROWSER REQUIREMENTS</span>
+        <h2>Keep the browser open</h2>
+        <p>The virtual PC uses your computer's CPU and memory while this tab is running. On a 4 GB computer, close extra tabs and apps first. Boot speed depends on your device and internet connection.</p>
+      </article>
+      <article class="run-info-card">
+        <span class="section-kicker">SAFETY & STORAGE</span>
+        <h2>Separate from your real disks</h2>
+        <p>The VM boots from the live ISO as a virtual CD. This browser page does not access, format or install anything to your real internal drives or USB devices. Changes in the live session are temporary.</p>
+      </article>
+    </section>
+
+    <div class="run-links">
+      <a class="text-link" href="https://github.com/sd201826/Computer/releases/tag/restore-lab-live-latest" target="_blank" rel="noopener">Download the ISO instead ↗</a>
+      <span>Browser engine: <a href="https://github.com/portlandhodl/v86_64" target="_blank" rel="noopener">v86_64</a> (WebAssembly x86-64 emulator)</span>
+    </div>
+    <div class="run-disclaimer"><strong>Important:</strong> This is Debian Linux running in a browser-based virtual machine. It is not Windows, and it cannot install or repair Windows. The VM may be slow or may not boot on every browser or device.</div>
+  </main>
+
+  <footer class="footer shell">
+    <span>© <span id="year"></span> RESTORE LAB · PERSONAL PROJECT</span>
+    <span>Windows is a Microsoft trademark. This project is independent and unofficial.</span>
+  </footer>
+</body>
+</html>
