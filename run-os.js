@@ -43,12 +43,17 @@
   function showSelectedIso(file) {
     selectedIsoFile = file || null;
     if (selectedIsoFile) {
-      isoName.textContent = selectedIsoFile.name + " · " +
-        (selectedIsoFile.size / (1024 * 1024)).toFixed(1) + " MiB";
-      detail.textContent = "Your chosen ISO will be attached as a virtual DVD in this browser VM on the next start.";
+      const size = (selectedIsoFile.size / (1024 * 1024)).toFixed(1) + " MiB";
+      if (/\\.img$/i.test(selectedIsoFile.name)) {
+        isoName.textContent = selectedIsoFile.name + " · " + size + " · virtual hard disk";
+        detail.textContent = "This IMG file will be attached as the virtual hard drive and booted inside the browser.";
+      } else {
+        isoName.textContent = selectedIsoFile.name + " · " + size + " · virtual DVD";
+        detail.textContent = "This ISO file will be attached as a virtual DVD and booted inside the browser.";
+      }
     } else {
-      isoName.textContent = "Restore-Lab-Installer-amd64.iso · streamed from the release";
-      detail.textContent = "The same Restore-Lab-Installer-amd64.iso used by Rufus is streamed here as a virtual DVD.";
+      isoName.textContent = "Restore-Lab-Installer-amd64.iso · online image";
+      detail.textContent = "The built-in Restore Lab image is streamed into this virtual PC. No physical USB is required.";
     }
   }
 
@@ -93,14 +98,22 @@
     return size;
   }
 
-  function selectedBootMedia(remoteIsoSize) {
-    if (selectedIsoFile) {
-      return { buffer: selectedIsoFile, async: true };
-    }
+  function buildStorageOptions(remoteIsoSize) {
+    const localDiskImage = Boolean(selectedIsoFile && /\\.img$/i.test(selectedIsoFile.name));
+    const localImage = selectedIsoFile ? { buffer: selectedIsoFile } : null;
+
     return {
-      url: "/api/restore-lab-iso",
-      size: remoteIsoSize,
-      async: true
+      hda: localDiskImage ? localImage : {
+        url: "/api/blank-disk",
+        size: VIRTUAL_DISK_SIZE,
+        async: true
+      },
+      cdrom: localDiskImage ? undefined : (localImage || {
+        url: "/api/restore-lab-iso",
+        size: remoteIsoSize,
+        async: true
+      }),
+      boot_order: localDiskImage ? 0x132 : 0x123
     };
   }
 
@@ -117,7 +130,10 @@
 
       const remoteIsoSize = selectedIsoFile ? null : await getRemoteIsoSize();
       setStatus("Creating the virtual PC…", "busy");
-      detail.textContent = "Attaching the same published installer ISO and a blank 16 GiB virtual hard disk.";
+      const storage = buildStorageOptions(remoteIsoSize);
+      detail.textContent = selectedIsoFile
+        ? "Attaching your selected USB disk image to the virtual PC."
+        : "Streaming the Restore Lab ISO as a virtual DVD and attaching a temporary 16 GiB virtual hard disk.";
 
       emulator = new window.V86({
         wasm_path: "/api/vm-assets/v86.wasm",
@@ -126,17 +142,13 @@
         screen_container: screenContainer,
         bios: { url: "/api/vm-assets/seabios.bin" },
         vga_bios: { url: "/api/vm-assets/vgabios.bin" },
-        cdrom: selectedBootMedia(remoteIsoSize),
-        hda: {
-          url: "/api/blank-disk",
-          size: VIRTUAL_DISK_SIZE,
-          async: true
-        },
+        hda: storage.hda,
+        cdrom: storage.cdrom,
         fdc: {
           fda: { drive_type: 0 },
           fdb: { drive_type: 0 }
         },
-        boot_order: 0x123,
+        boot_order: storage.boot_order,
         acpi: true,
         disable_speaker: true,
         autostart: true
@@ -145,7 +157,9 @@
       emulator.add_listener("emulator-ready", () => {
         placeholder.hidden = true;
         setStatus("Virtual PC ready — starting boot…", "busy");
-        detail.textContent = "The published installer ISO is connected as a virtual DVD, with a temporary 16 GiB virtual hard disk.";
+        detail.textContent = selectedIsoFile
+          ? "Your selected local image is connected inside the virtual PC."
+          : "The online Restore Lab ISO and temporary virtual hard disk are connected.";
       });
 
       emulator.add_listener("emulator-started", () => {
@@ -176,13 +190,20 @@
       emulator.add_listener("download-error", (event) => {
         const name = event && event.file_name ? event.file_name : "a VM image";
         setStatus("Could not load VM media", "error");
-        detail.textContent = "Failed to load " + name + ". Check the connection, then power off and retry.";
+        detail.textContent = "Failed to load " + name + ". Check the internet connection or select a different image. Power off before trying again.";
+        startButton.disabled = false;
       });
 
       setControls();
       screenContainer.focus();
     } catch (error) {
+      const failed = emulator;
       emulator = null;
+      if (failed) {
+        try { await failed.stop(); } catch (stopError) {}
+        try { await failed.destroy(); } catch (destroyError) {}
+      }
+      placeholder.hidden = false;
       setControls();
       setStatus("Could not start the virtual PC", "error");
       detail.textContent = error && error.message ? error.message : "An unexpected error occurred.";
@@ -235,7 +256,7 @@
 
     placeholder.hidden = false;
     setStatus("Virtual PC powered off", "ready");
-    detail.textContent = "The session ended. The temporary 16 GiB virtual disk is cleared when you power off.";
+    detail.textContent = "The session ended. Changes to the temporary virtual disk are cleared when you power off.";
     setControls();
   }
 
@@ -249,13 +270,13 @@
       return;
     }
     showSelectedIso(file);
-    setStatus(file ? "Custom installer media selected" : "Ready — press Start OS", "ready");
+    setStatus(file ? "Local disk image selected" : "Ready — press Start OS", "ready");
   });
 
   clearIsoButton.addEventListener("click", () => {
     isoInput.value = "";
     showSelectedIso(null);
-    setStatus("Using the same online installer ISO", "ready");
+    setStatus("Using the built-in Restore Lab image", "ready");
   });
 
   startButton.addEventListener("click", startVm);
