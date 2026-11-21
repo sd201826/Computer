@@ -1,32 +1,51 @@
 #!/bin/sh
 set -e
 
-mkdir -p /etc/skel/Desktop /usr/share/restore-lab /usr/local/bin
-cat > /etc/skel/Desktop/Install-Restore-Lab.desktop <<'EOF'
+mkdir -p /etc/skel/Desktop /etc/skel/.config/autostart /etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml /usr/share/restore-lab /usr/local/bin
+
+cat > /etc/skel/Desktop/Start-Setup-Preview.desktop <<'EOF'
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Install Restore Lab
-Comment=Install the Debian-based Restore Lab system to a computer
-Exec=pkexec calamares
-Icon=system-software-install
+Name=Start Setup Preview
+Comment=Open the Restore Lab Windows-style setup simulator
+Exec=/usr/local/bin/restore-setup-demo
+Icon=preferences-system
 Terminal=false
 Categories=System;
 EOF
-chmod 755 /etc/skel/Desktop/Install-Restore-Lab.desktop
+chmod 755 /etc/skel/Desktop/Start-Setup-Preview.desktop
+
+cat > /etc/skel/Desktop/Firefox.desktop <<'EOF'
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Firefox ESR
+Exec=firefox-esr
+Icon=firefox-esr
+Terminal=false
+Categories=Network;WebBrowser;
+EOF
+chmod 755 /etc/skel/Desktop/Firefox.desktop
 
 cat > /etc/skel/Desktop/Choose-Desktop-Style.desktop <<'EOF'
 [Desktop Entry]
 Version=1.0
 Type=Application
 Name=Choose Desktop Style
-Comment=Choose a Windows-inspired Restore Lab desktop appearance
+Comment=Choose a Windows-inspired Linux desktop appearance
 Exec=restore-theme
 Icon=preferences-desktop-theme
 Terminal=false
 Categories=Settings;DesktopSettings;
 EOF
 chmod 755 /etc/skel/Desktop/Choose-Desktop-Style.desktop
+
+cat > /usr/local/bin/restore-setup-demo <<'EOF'
+#!/bin/sh
+exec firefox-esr --kiosk file:///usr/share/restore-lab/setup-demo/index.html
+EOF
+chmod 755 /usr/local/bin/restore-setup-demo
 
 cat > /usr/local/bin/restore-theme <<'EOF'
 #!/bin/sh
@@ -46,7 +65,6 @@ zenity --info --title='Restore Lab' --text="Applied the $choice appearance. This
 EOF
 chmod 755 /usr/local/bin/restore-theme
 
-mkdir -p /etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml
 cat > /etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml <<'EOF'
 <?xml version="1.0" encoding="UTF-8"?>
 <channel name="xsettings" version="1.0">
@@ -57,17 +75,28 @@ cat > /etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml <<'EOF'
 </channel>
 EOF
 
-cat > /usr/share/restore-lab/ABOUT.txt <<'EOF'
-RESTORE LAB LIVE
-
-This is a Debian-based Linux live operating system, not Microsoft Windows.
-It includes an XFCE desktop, Firefox ESR, Thunar file manager and Calamares installer.
-Use Choose Desktop Style to select Windows-inspired Linux themes.
-
-You can use the live desktop without installing it. Files saved to the USB or
-internal drives remain there only when you deliberately choose a writable location.
-
-The installer can change disk partitions and erase data. Back up important files,
-identify the correct target disk, and do not continue unless you understand the choices.
-Windows XP, Vista, 7, 10 and 11 are not included.
+cat > /etc/skel/.config/autostart/restore-setup-demo.desktop <<'EOF'
+[Desktop Entry]
+Type=Application
+Name=Restore Lab Setup Preview
+Exec=/usr/local/bin/restore-setup-demo
+OnlyShowIn=XFCE;
+X-GNOME-Autostart-enabled=true
 EOF
+
+cat > /usr/share/restore-lab/ABOUT.txt <<'EOF'
+RESTORE LAB SETUP PREVIEW
+
+This is a compact Debian Linux live system that opens a Windows-style setup simulator.
+It is NOT Microsoft Windows and does NOT contain Windows installation files.
+The setup preview is a visual demonstration only. It cannot install, repair, activate,
+or recover Windows and it does not modify internal disks.
+
+A Firefox browser and file manager are included. The desktop-style picker changes
+Linux themes only. Boot this USB to try the demo; no internal-disk installation is
+required or provided.
+EOF
+
+# Remove downloaded package archives and index caches from the final live filesystem.
+rm -rf /var/cache/apt/archives/*.deb /var/lib/apt/lists/*
+find /var/log -type f -exec truncate -s 0 {} \; || true
