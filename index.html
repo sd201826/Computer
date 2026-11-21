@@ -56,7 +56,7 @@
           <div class="console-heading">SYSTEM OVERVIEW</div>
           <div class="console-row"><span>Workspace</span><strong>Computer recovery</strong></div>
           <div class="console-row"><span>USB access</span><strong class="status-limited">Browser limited</strong></div>
-          <div class="console-row"><span>Disk protection</span><strong class="status-ok">No disk writes</strong></div>
+          <div class="console-row"><span>Browser storage</span><strong class="status-ok">Virtual disk only</strong></div>
           <div class="console-row"><span>Live desktop</span><strong class="status-ok">XFCE + Firefox</strong></div>
           <div class="console-progress-label"><span>SAFE MODE</span><span>100%</span></div>
           <div class="console-progress"><span></span></div>
@@ -156,7 +156,7 @@
               <div class="setup-preview-choices"><i>Windows 11</i><i>Windows 10</i><i>Windows 7</i><i>Vista / XP</i></div>
               <div class="setup-preview-button">Continue preview <span>→</span></div>
             </div>
-            <div class="setup-preview-footer">NO WINDOWS FILES · NO DISK WRITES</div>
+            <div class="setup-preview-footer">NO WINDOWS MEDIA · INSTALL IS OPTIONAL</div>
           </div>
           <div class="theme-note">The browser preview and Rufus USB use the same installer ISO. The installer installs Debian-based Restore Lab, not Windows.</div>
         </div>
@@ -186,36 +186,9 @@
       </div>
     </section>
 
-    <section class="section shell" id="simulator">
-      <div class="simulator-card">
-        <div class="simulator-copy">
-          <div class="section-kicker">04 / OPTIONAL BOOT MENU DEMO</div>
-          <div class="demo-label"><span></span> VISUAL SIMULATOR — NOT WINDOWS</div>
-          <h2>See a setup screen<br>before installing anything.</h2>
-          <p>A small custom ISO is built by GitHub Actions. It boots to a setup-inspired menu for Windows 11, 10, 7, Vista and XP. It does not contain Windows files and cannot install, repair or activate Windows.</p>
-          <div class="simulator-actions">
-            <a class="button button-primary" href="https://github.com/sd201826/Computer/releases/tag/simulator-latest" target="_blank" rel="noopener">Get demo ISO <span aria-hidden="true">↓</span></a>
-            <a class="text-link" href="https://github.com/sd201826/Computer/actions/workflows/build-demo-iso.yml" target="_blank" rel="noopener">View ISO build status ↗</a>
-          </div>
-          <div class="simulator-warning"><span>!</span> Rufus can write this demo ISO, but booting it only opens the simulator. It is not a Windows installer.</div>
-        </div>
-        <div class="boot-preview" aria-label="Illustration of the boot simulator menu">
-          <div class="boot-top"><span>RESTORE LAB SETUP</span><span>BOOT MENU</span></div>
-          <div class="boot-title">Select a setup preview</div>
-          <div class="boot-option active"><span>▸</span> Windows 11 — Visual demo</div>
-          <div class="boot-option"><span> </span> Windows 10 — Visual demo</div>
-          <div class="boot-option"><span> </span> Windows 7 — Visual demo</div>
-          <div class="boot-option"><span> </span> Windows Vista — Visual demo</div>
-          <div class="boot-option"><span> </span> Windows XP — Visual demo</div>
-          <div class="boot-foot"><span>ENTER: SELECT</span><span>ESC: BACK</span></div>
-          <div class="boot-disclaimer">DEMO ONLY · NO DISK WRITES</div>
-        </div>
-      </div>
-    </section>
-
     <section class="section shell" id="restore">
       <div class="section-heading">
-        <div><div class="section-kicker">05 / COMPUTER RESTORE</div><h2>A safer restore checklist</h2></div>
+        <div><div class="section-kicker">04 / COMPUTER RESTORE</div><h2>A safer restore checklist</h2></div>
         <p>Follow the order. Do not format a drive unless you have a verified backup and know exactly which disk you selected.</p>
       </div>
       <div class="restore-grid">
