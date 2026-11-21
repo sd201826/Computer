@@ -15,7 +15,6 @@
   const isoName = document.getElementById("isoName");
   const clearIsoButton = document.getElementById("clearIso");
 
-  const ISO_SIZE = 782237696;
   const VIRTUAL_DISK_SIZE = 4 * 1024 * 1024 * 1024;
 
   let emulator = null;
@@ -48,8 +47,8 @@
         (selectedIsoFile.size / (1024 * 1024)).toFixed(1) + " MiB";
       detail.textContent = "Selected ISO will be attached as a virtual CD/DVD on the next start.";
     } else {
-      isoName.textContent = "Restore Lab demo ISO · 746 MiB";
-      detail.textContent = "The Restore Lab demo ISO will boot from the virtual CD/DVD.";
+      isoName.textContent = "Restore Lab installer ISO · size checked at start";
+      detail.textContent = "The Restore Lab installer ISO will boot from the virtual CD/DVD. Use Rufus for a physical USB.";
     }
   }
 
@@ -79,13 +78,28 @@
     return enginePromise;
   }
 
-  function selectedBootMedia() {
+  async function getRemoteIsoSize() {
+    const response = await fetch("/api/restore-lab-iso", {
+      method: "HEAD",
+      cache: "no-store"
+    });
+    if (!response.ok) {
+      throw new Error("Could not check the installer ISO size. Try again or download it for Rufus.");
+    }
+    const size = Number(response.headers.get("Content-Length"));
+    if (!Number.isSafeInteger(size) || size <= 0) {
+      throw new Error("The installer host did not return a valid ISO size.");
+    }
+    return size;
+  }
+
+  function selectedBootMedia(remoteIsoSize) {
     if (selectedIsoFile) {
       return { buffer: selectedIsoFile, async: true };
     }
     return {
       url: "/api/restore-lab-iso",
-      size: ISO_SIZE,
+      size: remoteIsoSize,
       async: true
     };
   }
@@ -101,6 +115,7 @@
     try {
       await loadEngine();
 
+      const remoteIsoSize = selectedIsoFile ? null : await getRemoteIsoSize();
       setStatus("Creating the virtual PC…", "busy");
       detail.textContent = "Attaching the boot ISO and a new blank 4 GiB virtual hard disk.";
 
@@ -111,7 +126,7 @@
         screen_container: screenContainer,
         bios: { url: "/api/vm-assets/seabios.bin" },
         vga_bios: { url: "/api/vm-assets/vgabios.bin" },
-        cdrom: selectedBootMedia(),
+        cdrom: selectedBootMedia(remoteIsoSize),
         hda: {
           url: "/api/blank-disk",
           size: VIRTUAL_DISK_SIZE,
@@ -240,7 +255,7 @@
   clearIsoButton.addEventListener("click", () => {
     isoInput.value = "";
     showSelectedIso(null);
-    setStatus("Using Restore Lab demo media", "ready");
+    setStatus("Using Restore Lab installer media", "ready");
   });
 
   startButton.addEventListener("click", startVm);
