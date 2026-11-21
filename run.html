@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b1220">
-  <meta name="description" content="Run the Restore Lab Debian-based live system and preview its installer in a browser-based virtual PC.">
-  <title>Run Restore Lab — Browser Virtual PC</title>
+  <meta name="description" content="Run a disk image from your computer or USB inside a browser-based virtual PC.">
+  <title>Restore Lab — Browser OS</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -21,31 +21,29 @@
     <a class="brand" href="index.html" aria-label="Restore Lab home">
       <span class="brand-mark"><span></span><span></span><span></span><span></span></span>
       <span>RESTORE<span class="brand-light">LAB</span></span>
-      <span class="version-tag">BROWSER VM</span>
+      <span class="version-tag">BROWSER OS</span>
     </a>
     <nav class="main-nav" aria-label="Main navigation">
-      <a href="index.html#systems">Systems</a>
-      <a href="#install-media">Installer & virtual disk</a>
-      <a href="run.html" aria-current="page">Run OS</a>
-      <a href="index.html#restore">Restore guide</a>
+      <a href="index.html#usb-reader">USB Reader</a>
+      <a href="run.html" aria-current="page">Browser OS</a>
     </nav>
-    <a class="top-action" href="https://github.com/sd201826/Computer" target="_blank" rel="noopener">View source <span aria-hidden="true">↗</span></a>
+    <a class="top-action" href="https://github.com/sd201826/Computer" target="_blank" rel="noopener">Source <span aria-hidden="true">↗</span></a>
   </header>
 
   <main class="run-page shell">
-    <a class="run-back" href="index.html">← Back to Restore Lab</a>
+    <a class="run-back" href="index.html">← Back to USB Workspace</a>
 
     <section class="run-heading">
-      <div class="eyebrow"><span class="pulse-dot"></span> RESTORE LAB / BROWSER VIRTUAL PC <span class="eyebrow-line"></span> LIVE SESSION</div>
-      <h1>Run the OS <span class="gradient-text">in your browser.</span></h1>
-      <p class="run-lead">The browser and USB use the same file: Restore-Lab-Installer-amd64.iso. Here, the website streams it into an emulated x86-64 PC as a virtual DVD. For your real PC, download that same ISO and write it to a USB with Rufus.</p>
+      <div class="eyebrow"><span class="pulse-dot"></span> RESTORE LAB / VIRTUAL COMPUTER <span class="eyebrow-line"></span> NO RESTART</div>
+      <h1>Run an OS <span class="gradient-text">inside this website.</span></h1>
+      <p class="run-lead">Start the built-in Restore Lab system, or choose an ISO / IMG file from your USB or computer. The image boots in an emulated PC inside this browser tab. Your physical Windows session stays running.</p>
     </section>
 
-    <section class="vm-panel" aria-label="Restore Lab virtual computer">
+    <section class="vm-panel" aria-label="Browser virtual computer">
       <div class="vm-toolbar">
         <div class="vm-title">
           <span class="vm-led"></span>
-          <div><strong>RESTORE LAB VIRTUAL PC</strong><small>Debian Trixie · XFCE · Calamares installer + optional demo</small></div>
+          <div><strong>RESTORE LAB VIRTUAL PC</strong><small>x86-64 emulation · local files stay in your browser</small></div>
         </div>
         <div class="vm-status" id="vmStatus" role="status" aria-live="polite">
           <span class="vm-status-dot"></span><span id="vmStatusText">Ready — press Start OS</span>
@@ -58,8 +56,8 @@
           <canvas id="vga"></canvas>
           <div class="vm-screen-placeholder" id="vmScreenPlaceholder">
             <div class="vm-power-symbol">⏻</div>
-            <strong>Virtual PC is powered off</strong>
-            <span>Press Start OS below to boot Restore Lab.</span>
+            <strong>Virtual computer is off</strong>
+            <span>Press Start OS to launch the browser-based PC.</span>
           </div>
         </div>
       </div>
@@ -72,89 +70,55 @@
         <button class="button button-danger" id="stopVm" type="button" disabled>Power off</button>
       </div>
 
-      <section class="vm-media-panel" id="install-media" aria-label="Boot media and virtual storage">
+      <section class="vm-media-panel" id="boot-source" aria-label="Select a local operating system image">
         <div class="vm-media-heading">
           <div>
-            <span class="section-kicker">VIRTUAL HARDWARE</span>
-            <h2>Same installer ISO · virtual target disk</h2>
+            <span class="section-kicker">BOOT SOURCE</span>
+            <h2>Choose where the virtual PC starts</h2>
           </div>
-          <span class="vm-media-tag">ISOLATED VM</span>
+          <span class="vm-media-tag">LOCAL FILE PICKER</span>
         </div>
 
         <div class="vm-media-grid">
           <article class="vm-media-card">
-            <span class="vm-media-label">01 / VIRTUAL CD OR DVD</span>
-            <h3>Choose an installer ISO</h3>
-            <p>Use the Restore Lab installer ISO, or choose another bootable ISO file. In this browser VM it is attached as a virtual DVD, not a physical USB stick.</p>
+            <span class="vm-media-label">01 / USB OR COMPUTER FILE</span>
+            <h3>Open an ISO or IMG file</h3>
+            <p>Choose an image stored on your USB or computer. ISO files boot as a virtual DVD. IMG files boot as a virtual hard disk.</p>
             <label class="vm-file-picker">
-              <span>Choose ISO / IMG file</span>
+              <span>Choose ISO / IMG from USB or PC</span>
               <input id="isoFile" type="file" accept=".iso,.img,application/x-iso9660-image">
             </label>
-            <div class="vm-iso-name" id="isoName">Restore-Lab-Installer-amd64.iso · fetched from GitHub at boot</div>
-            <button class="button button-outline vm-clear-iso" id="clearIso" type="button">Use the same online installer ISO</button>
+            <div class="vm-iso-name" id="isoName">Restore-Lab-Installer-amd64.iso · online image</div>
+            <button class="button button-outline vm-clear-iso" id="clearIso" type="button">Use built-in Restore Lab OS</button>
           </article>
 
           <article class="vm-media-card">
-            <span class="vm-media-label">02 / VIRTUAL HARD DISK</span>
-            <h3><span class="vm-disk-led"></span> Temporary virtual disk · 16 GiB</h3>
-            <p>A blank 16 GiB virtual hard disk is connected as the VM's first hard drive. You can test the installer here; it is separate from the PC's real SSD and USB.</p>
-            <div class="vm-disk-spec"><span>Device</span><strong>Virtual IDE / Primary master</strong></div>
-            <div class="vm-disk-spec"><span>Initial state</span><strong>Unpartitioned · 0 bytes used</strong></div>
-            <div class="vm-disk-spec"><span>Storage lifetime</span><strong>Temporary · current browser session</strong></div>
-            <div class="vm-disk-spec"><span>Host drive access</span><strong>Not connected</strong></div>
-          </article>
-
-          <article class="vm-media-card">
-            <span class="vm-media-label">03 / PHYSICAL USB INSTALLER</span>
-            <h3>Create the real installer USB</h3>
-            <p>The website cannot write to a physical USB. Download the exact same Restore-Lab-Installer-amd64.iso file and use Rufus on Windows to make your real bootable USB.</p>
-            <div class="vm-usb-actions">
-              <a class="button button-outline" href="https://github.com/sd201826/Computer/releases/tag/restore-lab-live-latest" target="_blank" rel="noopener">Download ISO ↓</a>
-              <a class="text-link" href="https://rufus.ie/" target="_blank" rel="noopener">Rufus website ↗</a>
-            </div>
-            <small class="vm-usb-warning">Rufus erases the selected USB. Back up its files first. After booting, installing can also erase the destination drive.</small>
+            <span class="vm-media-label">02 / VIRTUAL STORAGE</span>
+            <h3><span class="vm-disk-led"></span> Temporary 16 GiB drive</h3>
+            <p>The built-in Restore Lab ISO and a selected ISO use a temporary virtual drive. It is separate from your real Windows drive and USB.</p>
+            <div class="vm-disk-spec"><span>Virtual device</span><strong>Emulated hard disk</strong></div>
+            <div class="vm-disk-spec"><span>Initial state</span><strong>Empty · unpartitioned</strong></div>
+            <div class="vm-disk-spec"><span>Real drive access</span><strong>Not connected</strong></div>
           </article>
         </div>
 
         <div class="vm-media-note">
-          <strong>Same ISO, two places:</strong> The browser streams the published installer ISO into a virtual DVD and installs only onto its temporary 16 GiB virtual disk. Rufus writes that same ISO to your physical USB; booting the USB runs Restore Lab on your real PC. Browser installs never change your Windows drive, and the temporary virtual disk is erased when you power off.
+          <strong>USB reading:</strong> Select an ISO / IMG file from the USB using the file picker above. The USB Reader on the home page can browse files in a Windows-mounted USB folder. A Rufus-written physical USB cannot be passed to the virtual PC as a raw device; this website has no access to raw USB sectors.
         </div>
       </section>
 
       <div class="vm-foot">
-        <span id="vmDetail">The virtual machine has not started.</span>
-        <span>Guest memory: 1 GB · Video memory: 16 MB</span>
+        <span id="vmDetail">The virtual computer has not started.</span>
+        <span>Guest memory: 1 GiB · Video memory: 16 MiB</span>
       </div>
     </section>
 
-    <section class="run-info-grid">
-      <article class="run-info-card">
-        <span class="section-kicker">WHAT YOU ARE RUNNING</span>
-        <h2>A real Linux live session</h2>
-        <p>This boots the Debian-based Restore Lab live system with XFCE, Firefox ESR and the Calamares graphical installer. Its Windows-inspired setup screens are an optional visual simulator, not Microsoft Windows.</p>
-      </article>
-      <article class="run-info-card">
-        <span class="section-kicker">BROWSER REQUIREMENTS</span>
-        <h2>Keep the browser open</h2>
-        <p>The virtual PC uses your computer's CPU and memory while this tab is running. On a 4 GB computer, close extra tabs and apps first. Boot speed depends on your device and internet connection.</p>
-      </article>
-      <article class="run-info-card">
-        <span class="section-kicker">SAFETY & STORAGE</span>
-        <h2>Separate from your real disks</h2>
-        <p>The VM boots from the exact published ISO as a virtual CD and uses only its temporary 16 GiB virtual disk. This page cannot access, format or install anything to your real internal drives or physical USB devices.</p>
-      </article>
-    </section>
-
-    <div class="run-links">
-      <a class="text-link" href="https://github.com/sd201826/Computer/releases/tag/restore-lab-live-latest" target="_blank" rel="noopener">Download the ISO instead ↗</a>
-      <span>Browser engine: <a href="https://github.com/portlandhodl/v86_64" target="_blank" rel="noopener">v86_64</a> (WebAssembly x86-64 emulator)</span>
-    </div>
-    <div class="run-disclaimer"><strong>Important:</strong> Restore Lab is Debian-based Linux, not Windows. For a physical installation, use Rufus to create the USB, boot the PC from it, and choose Install Restore Lab. Installing to a drive can erase Windows and personal files; back up first.</div>
+    <div class="run-disclaimer"><strong>About the built-in image:</strong> Restore Lab is a Debian-based Linux live system. It is not Microsoft Windows. The Windows-inspired setup screens are an optional visual demo. Running the virtual PC does not restart your computer or change its real drives.</div>
   </main>
 
   <footer class="footer shell">
-    <span>© <span id="year"></span> RESTORE LAB · PERSONAL PROJECT</span>
-    <span>Windows is a Microsoft trademark. This project is independent and unofficial.</span>
+    <span>© <span id="year"></span> RESTORE LAB · BROWSER WORKSPACE</span>
+    <span>Local disk images are opened only after you choose them.</span>
   </footer>
 </body>
 </html>
