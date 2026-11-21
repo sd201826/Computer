@@ -24,7 +24,7 @@
     <nav class="main-nav" aria-label="Main navigation">
       <a href="#systems">Systems</a>
       <a href="#usb">USB & Rufus</a>
-      <a href="#live-os">Live OS</a>
+      <a href="#live-os">Setup Preview</a>
       <a href="#restore">Restore guide</a>
     </nav>
     <a class="top-action" href="https://github.com/sd201826/Computer" target="_blank" rel="noopener">View source <span aria-hidden="true">↗</span></a>
@@ -35,10 +35,10 @@
       <div class="hero-copy">
         <div class="eyebrow"><span class="pulse-dot"></span> PC RECOVERY WORKSPACE <span class="eyebrow-line"></span> v1.0</div>
         <h1>Give your old PC<br><span class="gradient-text">another start.</span></h1>
-        <p class="hero-lead">Boot a real desktop from USB, browse the web, manage files, or optionally install Restore Lab to a computer. This is a Linux system with Windows-inspired themes—not Windows.</p>
+        <p class="hero-lead">Boot one compact demo USB to preview Windows-style setup screens. No multi-part Windows downloads and no internal-drive installation. This is a simulator, not Windows.</p>
         <div class="hero-actions">
           <a class="button button-primary" href="#systems">Explore Windows <span aria-hidden="true">→</span></a>
-          <a class="button button-quiet" href="#live-os">Explore Live OS</a>
+          <a class="button button-quiet" href="#live-os">Try Setup Preview</a>
         </div>
         <div class="hero-footnotes">
           <span><i class="tiny-check">✓</i> BIOS + UEFI demo</span>
@@ -131,27 +131,33 @@
     <section class="section shell" id="live-os">
       <div class="live-os-card">
         <div class="live-os-copy">
-          <div class="section-kicker">02 / BOOTABLE DESKTOP OPERATING SYSTEM</div>
-          <div class="demo-label"><span></span> REAL LINUX LIVE SYSTEM</div>
-          <h2>Boot a full desktop<br>from your USB.</h2>
-          <p>Restore Lab Live is a Debian-based desktop with Firefox ESR, Thunar file manager, Wi-Fi/network tools and an optional graphical installer. Start it from USB without installing it first.</p>
+          <div class="section-kicker">02 / ONE BOOTABLE DEMO ISO</div>
+          <div class="demo-label"><span></span> WINDOWS-STYLE SETUP SIMULATOR</div>
+          <h2>One USB.<br>Five setup previews.</h2>
+          <p>Boot Restore Lab from a USB and a full-screen setup simulator opens automatically. Choose a Windows 11, 10, 7, Vista or XP-inspired screen and run a visual progress demo. No 4 GB Windows downloads are needed.</p>
           <div class="live-feature-list">
-            <span>✓ Real Firefox browser</span><span>✓ File manager and local files</span>
-            <span>✓ Windows-inspired desktop styles</span><span>✓ Optional disk installation</span>
+            <span>✓ One ISO file</span><span>✓ 1–2 GB size target</span>
+            <span>✓ Built by GitHub in the cloud</span><span>✓ No internal disk changes</span>
           </div>
           <div class="simulator-actions">
-            <a class="button button-primary" href="https://github.com/sd201826/Computer/releases/tag/restore-lab-live-latest" target="_blank" rel="noopener">Download Live ISO <span aria-hidden="true">↓</span></a>
-            <a class="text-link" href="https://github.com/sd201826/Computer/actions/workflows/build-live-os.yml" target="_blank" rel="noopener">Check build status ↗</a>
+            <a class="button button-primary" href="https://github.com/sd201826/Computer/releases/tag/restore-lab-live-latest" target="_blank" rel="noopener">Get the demo ISO <span aria-hidden="true">↓</span></a>
+            <a class="text-link" href="https://github.com/sd201826/Computer/actions/workflows/build-live-os.yml" target="_blank" rel="noopener">Check cloud build ↗</a>
           </div>
-          <div class="simulator-warning"><span>!</span> Installing can change or erase the selected disk. Back up first. This is Linux, not Windows, and cannot run every Windows app.</div>
+          <div class="simulator-warning"><span>!</span> This is NOT Microsoft Windows. It cannot install, repair, activate or recover Windows. It only demonstrates setup screens; no partitions are formatted.</div>
         </div>
         <div class="live-os-preview">
-          <div class="desktop-window">
-            <div class="desktop-titlebar"><span>RESTORE LAB DESKTOP</span><span>— □ ×</span></div>
-            <div class="desktop-icons"><div><b>▣</b><span>Files</span></div><div><b>◎</b><span>Firefox</span></div><div><b>⚙</b><span>Settings</span></div><div><b>⬇</b><span>Install</span></div></div>
-            <div class="desktop-taskbar"><span>▦</span><span>Files</span><span>Firefox</span><span class="taskbar-clock">LIVE SESSION</span></div>
+          <div class="setup-preview-screen">
+            <div class="setup-preview-header"><span class="setup-preview-mark"></span><span>RESTORE LAB</span><b>DEMO MODE</b></div>
+            <div class="setup-preview-body">
+              <small>BOOTABLE USB EXPERIENCE</small>
+              <strong>Setup preview</strong>
+              <span>Choose a system to preview</span>
+              <div class="setup-preview-choices"><i>Windows 11</i><i>Windows 10</i><i>Windows 7</i><i>Vista / XP</i></div>
+              <div class="setup-preview-button">Continue preview <span>→</span></div>
+            </div>
+            <div class="setup-preview-footer">NO WINDOWS FILES · NO DISK WRITES</div>
           </div>
-          <div class="theme-note">Desktop styles: 11 · 10 · 7 · Vista · XP inspired</div>
+          <div class="theme-note">A visual simulator only — not a Windows installer.</div>
         </div>
       </div>
     </section>
