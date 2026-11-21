@@ -1,20 +1,22 @@
-# Restore Lab Live
+# Restore Lab Setup Preview
 
-This folder contains the configuration for a bootable Debian-based live desktop.
+This folder documents the small, bootable Debian-based live system used to launch the Restore Lab setup simulator.
 
-## Included in the image
+## What is included
 
-- XFCE desktop
+- Lean XFCE graphical desktop
 - Firefox ESR browser
-- Thunar file manager
+- Thunar file manager with removable-drive support
 - Network Manager
-- Calamares graphical installer
-- Dark desktop styling and Restore Lab wallpaper
+- Original Windows-style setup preview page
+- Desktop theme presets inspired by Windows 11, 10, 7, Vista and XP
 
-## What it is — and is not
+## What it does
 
-Restore Lab Live is a Linux operating system. It is not Windows and does not contain Windows 11, 10, 7, Vista or XP. Those names are only used for optional visual theme ideas on the website. It cannot run every Windows application.
+The computer boots into a real Debian Linux live session from USB. The setup-preview page opens in full-screen mode. Its screens are an interactive visual demonstration only.
 
-The live desktop can be started from USB without installing to the internal drive. Installing with Calamares can modify or erase the selected disk. Back up first and carefully review every disk and partition selection.
+It does **not** contain or install Microsoft Windows. It does not install, repair, activate, or recover Windows. It does not format or modify internal disks, and the build intentionally includes no disk installer.
 
-The ISO is built automatically by GitHub Actions from the configuration in `config/`.
+The single ISO is built on GitHub Actions cloud runners, not on the user's PC. The workflow checks that the ISO does not exceed 2 GiB before publishing. The intended target is around 1–2 GB; the final size must be confirmed by a successful build.
+
+For an actual Windows installation, use genuine installation media from Microsoft.
