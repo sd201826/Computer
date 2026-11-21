@@ -242,6 +242,7 @@
     const title = createText("h3", "usb-preview-title", file.name);
     const metadata = createText("p", "usb-preview-meta", formatBytes(file.size) + " · " + (file.type || "Unknown file type"));
     preview.append(title, metadata);
+    previewUrl = URL.createObjectURL(file);
 
     const ext = extension(file.name);
     const isText = /^(txt|md|log|ini|cfg|conf|json|xml|csv|html|htm|css|js|mjs|yaml|yml|toml|sh|bat|ps1|reg|nfo|desktop)$/i.test(ext) ||
@@ -259,7 +260,6 @@
         pre.textContent = "This file could not be previewed.";
       });
     } else if (/^(png|jpe?g|gif|webp|bmp|svg)$/i.test(ext) || (file.type && file.type.startsWith("image/"))) {
-      previewUrl = URL.createObjectURL(file);
       const image = document.createElement("img");
       image.className = "usb-image-preview";
       image.alt = file.name;
@@ -276,7 +276,7 @@
 
     const download = document.createElement("a");
     download.className = "usb-download-link";
-    download.href = URL.createObjectURL(file);
+    download.href = previewUrl;
     download.download = file.name.split("/").pop() || "usb-file";
     download.textContent = "Save a copy";
     preview.appendChild(download);
@@ -337,6 +337,7 @@
     else if (fallbackFiles) renderFallbackFiles();
   });
 
+  refreshButton.disabled = true;
   list.replaceChildren(createText("p", "usb-list-empty", "No USB folder connected."));
   showEmptyPreview("Select a USB folder, then choose a file to view it.");
 })();
