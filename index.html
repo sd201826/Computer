@@ -34,8 +34,8 @@
     <section class="usb-hero">
       <div>
         <div class="eyebrow"><span class="pulse-dot"></span> LOCAL USB WORKSPACE <span class="eyebrow-line"></span> BROWSER ONLY</div>
-        <h1>Explore your USB.<br><span class="gradient-text">Run an OS in a tab.</span></h1>
-        <p>Connect a USB folder to browse its visible files, preview setup and boot files, and open a disk image in the browser virtual PC. No computer restart is needed for the browser VM.</p>
+        <h1>Explore your USB.<br><span class="gradient-text">Run a Rufus USB in a tab.</span></h1>
+        <p>Browse ordinary USB files, or use the Windows USB Bridge to read a Rufus-burned USB as a virtual disk. Run it inside the browser without restarting your laptop.</p>
         <div class="usb-hero-actions">
           <a class="button button-primary" href="#usb-reader">Connect USB folder ↓</a>
           <a class="button button-outline" href="run.html">Open Browser OS →</a>
@@ -80,7 +80,7 @@
         <section class="usb-side-card">
           <span class="section-kicker">02 / BROWSER VIRTUAL PC</span>
           <h3>Run the operating-system image</h3>
-          <p>Open the virtual PC and choose an ISO or IMG file. You can select an image stored on your USB. It boots inside the browser, not on your physical PC.</p>
+          <p>Open the virtual PC and connect the Windows USB Bridge. Select the Rufus-written USB and boot it inside the browser, not on your physical PC.</p>
           <a class="button button-primary" href="run.html">Open Browser OS →</a>
         </section>
         <section class="usb-side-card" id="limits">
@@ -91,14 +91,14 @@
             <li>Browse folders and file names</li>
             <li>Preview text and images</li>
             <li>Select an ISO / IMG file for the virtual PC</li>
-            <li>No raw USB sectors or boot-area access</li>
-            <li>No direct boot of a Rufus-flashed physical USB</li>
+            <li>With the Windows helper, read Rufus USB sectors in read-only mode</li>
+            <li>Optionally save a complete copy in browser storage (OPFS)</li>
           </ul>
         </section>
       </aside>
     </section>
 
-    <p class="usb-footnote">Important: a bootable USB written by Rufus is not the same as an ISO file. The browser can inspect files on a partition Windows exposes, but it cannot read the complete physical USB image or start the USB as raw hardware. To run an OS in this website, choose the original ISO / IMG file from the USB (if you saved it there) or use the built-in Restore Lab image on the Browser OS page.</p>
+    <p class="usb-footnote">Important: a Rufus-written USB can be connected through the optional Windows USB Bridge. The helper is read-only and must remain open while booting directly from the USB. You can also save a full copy in browser private storage (OPFS), if enough space is available. See the Browser OS page for the bridge controls and Windows helper download.</p>
   </main>
 
   <footer class="footer shell">
