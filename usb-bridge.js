@@ -340,8 +340,6 @@
       const root = await navigator.storage.getDirectory();
       try { await root.removeEntry(CACHE_FILE); } catch (error) {}
       localStorage.removeItem(CACHE_META_KEY);
-      if (savedUrl) URL.revokeObjectURL(savedUrl);
-      savedUrl = null;
       savedFile = null;
       savedInfo.textContent = "No saved USB image in this browser.";
       setStatus("Saved browser copy deleted. The physical USB was not changed.", "ok");
@@ -352,6 +350,18 @@
   }
 
   window.RestoreLabUsbBridge = { closeSession };
+
+  window.addEventListener("pagehide", () => {
+    for (const sessionId of activeSessions) {
+      fetch(BRIDGE_BASE + "/api/sessions/" + encodeURIComponent(sessionId), {
+        method: "DELETE",
+        mode: "cors",
+        credentials: "omit",
+        keepalive: true
+      }).catch(() => {});
+    }
+    activeSessions.clear();
+  });
 
   connectButton.addEventListener("click", connectBridge);
   refreshButton.addEventListener("click", async () => {
