@@ -20,6 +20,7 @@
   let emulator = null;
   let enginePromise = null;
   let selectedIsoFile = null;
+  let selectedUsbImage = null;
 
   document.getElementById("year").textContent = new Date().getFullYear();
 
@@ -99,6 +100,18 @@
   }
 
   function buildStorageOptions(remoteIsoSize) {
+    if (selectedUsbImage) {
+      return {
+        hda: {
+          url: selectedUsbImage.url,
+          size: selectedUsbImage.size,
+          async: true
+        },
+        cdrom: undefined,
+        boot_order: 0x132
+      };
+    }
+
     const localDiskImage = Boolean(selectedIsoFile && selectedIsoFile.name.toLowerCase().endsWith(".img"));
     const localImage = selectedIsoFile ? { buffer: selectedIsoFile } : null;
 
@@ -128,12 +141,14 @@
     try {
       await loadEngine();
 
-      const remoteIsoSize = selectedIsoFile ? null : await getRemoteIsoSize();
+      const remoteIsoSize = (selectedIsoFile || selectedUsbImage) ? null : await getRemoteIsoSize();
       setStatus("Creating the virtual PC…", "busy");
       const storage = buildStorageOptions(remoteIsoSize);
-      detail.textContent = selectedIsoFile
-        ? "Attaching your selected USB disk image to the virtual PC."
-        : "Streaming the Restore Lab ISO as a virtual DVD and attaching a temporary 16 GiB virtual hard disk.";
+      detail.textContent = selectedUsbImage
+        ? "Connecting the Rufus-written USB as a read-only virtual hard disk."
+        : selectedIsoFile
+          ? "Attaching your selected ISO / IMG file to the virtual PC."
+          : "Streaming the Restore Lab ISO as a virtual DVD and attaching a temporary 16 GiB virtual hard disk.";
 
       emulator = new window.V86({
         wasm_path: "/api/vm-assets/v86.wasm",
@@ -157,9 +172,11 @@
       emulator.add_listener("emulator-ready", () => {
         placeholder.hidden = true;
         setStatus("Virtual PC ready — starting boot…", "busy");
-        detail.textContent = selectedIsoFile
-          ? "Your selected local image is connected inside the virtual PC."
-          : "The online Restore Lab ISO and temporary virtual hard disk are connected.";
+        detail.textContent = selectedUsbImage
+          ? "The USB image is connected in read-only mode. Guest changes cannot be written to the physical USB."
+          : selectedIsoFile
+            ? "Your selected local image is connected inside the virtual PC."
+            : "The online Restore Lab ISO and temporary virtual hard disk are connected.";
       });
 
       emulator.add_listener("emulator-started", () => {
@@ -194,7 +211,7 @@
         placeholder.hidden = false;
         setControls();
         setStatus("Could not load VM media", "error");
-        detail.textContent = "Failed to load " + name + ". Check the internet connection or choose another ISO / IMG file.";
+        detail.textContent = "Failed to load " + name + ". For a live USB, check that the USB is connected and Restore Lab USB Bridge is still running.";
         if (failed) {
           Promise.resolve().then(() => failed.stop()).then(() => failed.destroy()).catch(() => {});
         }
@@ -275,12 +292,16 @@
       detail.textContent = "Select a bootable .iso or .img file.";
       return;
     }
+    if (selectedUsbImage && selectedUsbImage.objectUrl) URL.revokeObjectURL(selectedUsbImage.url);
+    selectedUsbImage = null;
     showSelectedIso(file);
     setStatus(file ? "Local disk image selected" : "Ready — press Start OS", "ready");
   });
 
   clearIsoButton.addEventListener("click", () => {
     isoInput.value = "";
+    if (selectedUsbImage && selectedUsbImage.objectUrl) URL.revokeObjectURL(selectedUsbImage.url);
+    selectedUsbImage = null;
     showSelectedIso(null);
     setStatus("Using the built-in Restore Lab image", "ready");
   });
@@ -294,7 +315,7 @@
     emulator.restart();
     pauseButton.textContent = "Pause";
     setStatus("Restarting the virtual PC…", "busy");
-    detail.textContent = "The computer is rebooting from the virtual CD/DVD.";
+    detail.textContent = selectedUsbImage ? "The virtual PC is rebooting from the attached USB disk." : "The virtual PC is rebooting from the selected boot image.";
   });
 
   fullscreenButton.addEventListener("click", async () => {
@@ -303,6 +324,30 @@
     } catch (error) {
       setStatus("Fullscreen is unavailable in this browser", "error");
     }
+  });
+
+  document.addEventListener("restore-lab:boot-usb", async (event) => {
+    const image = event.detail;
+    if (!image || typeof image.url !== "string" || !Number.isSafeInteger(image.size) || image.size <= 0) {
+      setStatus("Invalid USB image", "error");
+      detail.textContent = "The USB Bridge did not provide a valid disk image.";
+      return;
+    }
+
+    if (emulator) {
+      await stopVm();
+    }
+    if (selectedUsbImage && selectedUsbImage.objectUrl && selectedUsbImage.url !== image.url) {
+      URL.revokeObjectURL(selectedUsbImage.url);
+    }
+
+    selectedUsbImage = image;
+    selectedIsoFile = null;
+    isoInput.value = "";
+    isoName.textContent = image.name + " · " + (image.source || "USB disk") + " · " + (image.size / (1024 * 1024 * 1024)).toFixed(2) + " GiB";
+    setStatus("Rufus USB selected — starting the virtual PC…", "busy");
+    detail.textContent = "The USB will be attached as a read-only virtual hard disk.";
+    await startVm();
   });
 
   showSelectedIso(null);
