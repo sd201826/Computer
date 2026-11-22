@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="run-os.css">
   <script src="run-os.js" defer></script>
+  <script src="usb-bridge.js" defer></script>
 </head>
 <body>
   <div class="ambient ambient-one"></div>
@@ -103,8 +104,48 @@
         </div>
 
         <div class="vm-media-note">
-          <strong>USB reading:</strong> Select an ISO / IMG file from the USB using the file picker above. The USB Reader on the home page can browse files in a Windows-mounted USB folder. A Rufus-written physical USB cannot be passed to the virtual PC as a raw device; this website has no access to raw USB sectors.
+          <strong>USB reading:</strong> Select an ISO / IMG file from the USB using the file picker above. The USB Reader on the home page can browse files in a Windows-mounted USB folder. For a Rufus-written physical USB, use the Windows USB Bridge below to read it in read-only mode.
         </div>
+      </section>
+
+      <section class="vm-media-panel" id="usb-bridge-panel" aria-label="Connect a Rufus-written USB drive">
+        <div class="vm-media-heading">
+          <div>
+            <span class="section-kicker">03 / RUFUS USB BRIDGE</span>
+            <h2>Read your burned USB directly</h2>
+          </div>
+          <span class="vm-media-tag">READ-ONLY USB ACCESS</span>
+        </div>
+        <p class="bridge-intro">Burn the ISO with Rufus, plug the USB into Windows, then run the Restore Lab USB Bridge helper. The website will see the whole USB disk, including its boot sectors and partitions.</p>
+        <div class="bridge-actions">
+          <button class="button button-primary" id="bridgeConnectBtn" type="button">Connect Windows USB Bridge</button>
+          <button class="button button-outline" id="bridgeRefreshBtn" type="button" disabled>Refresh USB list</button>
+        </div>
+        <p class="bridge-status" id="bridgeStatus" role="status" aria-live="polite">Bridge not connected. Start the Windows helper first.</p>
+        <div class="bridge-device-row">
+          <label for="bridgeDiskSelect">USB disk</label>
+          <select id="bridgeDiskSelect" disabled>
+            <option value="">Connect the bridge to list USB disks</option>
+          </select>
+          <span id="bridgeDiskSize">—</span>
+        </div>
+        <div class="bridge-actions">
+          <button class="button button-primary" id="bridgeBootBtn" type="button" disabled>Boot selected USB</button>
+          <button class="button button-outline" id="bridgeSaveBtn" type="button" disabled>Save a copy in browser storage</button>
+          <button class="button button-outline" id="bridgeBootSavedBtn" type="button" disabled>Boot saved copy</button>
+          <button class="button button-danger" id="bridgeDeleteSavedBtn" type="button" disabled>Delete saved copy</button>
+        </div>
+        <div class="bridge-progress-wrap" id="bridgeProgressWrap" hidden>
+          <div class="bridge-progress-top"><span id="bridgeProgressText">Copying USB image…</span><span id="bridgeProgressPercent">0%</span></div>
+          <progress id="bridgeProgress" max="100" value="0"></progress>
+        </div>
+        <p class="bridge-saved-info" id="bridgeSavedInfo">No saved USB image in this browser.</p>
+        <div class="vm-media-note">
+          <strong>Safety:</strong> The helper opens USB disks with read-only access. The virtual machine cannot write changes back to your physical USB. Keep the helper window open while booting directly from USB. Chrome may ask you to allow Restore Lab to connect to your local helper.
+          <br><strong>Storage:</strong> A saved copy is kept in this browser's private file storage (OPFS), not localStorage. Browser storage has a size limit, so the available space is checked before copying.
+          <br><strong>Compatibility:</strong> This virtual PC uses legacy BIOS emulation. A USB that is UEFI-only may not boot here.
+        </div>
+        <p class="bridge-download"><a href="https://github.com/sd201826/Computer/releases/tag/restore-lab-live-latest" target="_blank" rel="noopener">Get the Windows USB Bridge ZIP from GitHub Releases ↗</a></p>
       </section>
 
       <div class="vm-foot">
