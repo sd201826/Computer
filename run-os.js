@@ -217,8 +217,9 @@
         if (selectedUsbImage && selectedUsbImage.sessionId &&
             window.RestoreLabUsbBridge && typeof window.RestoreLabUsbBridge.closeSession === "function") {
           window.RestoreLabUsbBridge.closeSession(selectedUsbImage.sessionId);
-          selectedUsbImage.sessionId = null;
         }
+        selectedUsbImage = null;
+        showSelectedIso(null);
       });
 
       setControls();
@@ -237,8 +238,9 @@
       if (selectedUsbImage && selectedUsbImage.sessionId &&
           window.RestoreLabUsbBridge && typeof window.RestoreLabUsbBridge.closeSession === "function") {
         await window.RestoreLabUsbBridge.closeSession(selectedUsbImage.sessionId);
-        selectedUsbImage.sessionId = null;
       }
+      selectedUsbImage = null;
+      showSelectedIso(null);
       startButton.disabled = false;
     }
   }
@@ -283,8 +285,9 @@
     if (selectedUsbImage && selectedUsbImage.sessionId &&
         window.RestoreLabUsbBridge && typeof window.RestoreLabUsbBridge.closeSession === "function") {
       await window.RestoreLabUsbBridge.closeSession(selectedUsbImage.sessionId);
-      selectedUsbImage.sessionId = null;
     }
+    selectedUsbImage = null;
+    showSelectedIso(null);
 
     screenContainer.querySelectorAll("canvas").forEach((canvas) => {
       if (canvas.id === "vga") {
