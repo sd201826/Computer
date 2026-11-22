@@ -1,0 +1,57 @@
+name: Build Restore Lab USB Bridge
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "usb-bridge/**"
+      - ".github/workflows/build-usb-bridge.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Publish self-contained Windows executable
+        shell: pwsh
+        run: |
+          dotnet publish usb-bridge/RestoreLabUsbBridge.csproj -c Release -r win-x64 --self-contained true -o publish /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true /p:EnableCompressionInSingleFile=true /p:PublishTrimmed=false
+          if (!(Test-Path "publish/RestoreLabUsbBridge.exe")) {
+            throw "The USB Bridge executable was not created."
+          }
+
+      - name: Create ZIP package
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path package | Out-Null
+          Copy-Item publish/RestoreLabUsbBridge.exe package/
+          Copy-Item usb-bridge/README.md package/README.txt
+          Compress-Archive -Path package/* -DestinationPath RestoreLabUsbBridge-win-x64.zip -Force
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: RestoreLabUsbBridge-win-x64
+          path: RestoreLabUsbBridge-win-x64.zip
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Attach executable package to Restore Lab release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: restore-lab-live-latest
+          files: RestoreLabUsbBridge-win-x64.zip
+          overwrite_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
