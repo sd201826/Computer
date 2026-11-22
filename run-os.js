@@ -101,12 +101,11 @@
 
   function buildStorageOptions(remoteIsoSize) {
     if (selectedUsbImage) {
+      const diskSource = selectedUsbImage.buffer
+        ? { buffer: selectedUsbImage.buffer, async: true }
+        : { url: selectedUsbImage.url, size: selectedUsbImage.size, async: true };
       return {
-        hda: {
-          url: selectedUsbImage.url,
-          size: selectedUsbImage.size,
-          async: true
-        },
+        hda: diskSource,
         cdrom: undefined,
         boot_order: 0x132
       };
@@ -336,7 +335,9 @@
 
   document.addEventListener("restore-lab:boot-usb", async (event) => {
     const image = event.detail;
-    if (!image || typeof image.url !== "string" || !Number.isSafeInteger(image.size) || image.size <= 0) {
+    const hasUrl = image && typeof image.url === "string";
+    const hasFileBuffer = image && typeof File !== "undefined" && image.buffer instanceof File;
+    if (!image || (!hasUrl && !hasFileBuffer) || !Number.isSafeInteger(image.size) || image.size <= 0) {
       setStatus("Invalid USB image", "error");
       detail.textContent = "The USB Bridge did not provide a valid disk image.";
       return;
