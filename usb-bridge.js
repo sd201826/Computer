@@ -27,7 +27,6 @@
   let disks = [];
   let selectedDisk = null;
   let savedFile = null;
-  let savedUrl = null;
   const activeSessions = new Set();
 
   function setStatus(message, kind = "info") {
@@ -322,15 +321,12 @@
     }
 
     try {
-      if (savedUrl) URL.revokeObjectURL(savedUrl);
-      savedUrl = URL.createObjectURL(savedFile);
       dispatchBootImage({
-        url: savedUrl,
+        buffer: savedFile,
         size: savedFile.size,
         name: CACHE_FILE,
         source: "Saved browser copy",
-        isUsbImage: true,
-        objectUrl: true
+        isUsbImage: true
       });
       setStatus("Saved USB image attached to the virtual PC. The physical USB is not needed.", "ok");
     } catch (error) {
@@ -367,10 +363,6 @@
   saveButton.addEventListener("click", saveCopyToBrowser);
   bootSavedButton.addEventListener("click", bootSavedCopy);
   deleteSavedButton.addEventListener("click", deleteSavedCopy);
-
-  window.addEventListener("pagehide", () => {
-    if (savedUrl) URL.revokeObjectURL(savedUrl);
-  });
 
   updateButtons();
   loadSavedCopy();
