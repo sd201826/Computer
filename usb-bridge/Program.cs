@@ -69,6 +69,16 @@ app.MapGet("/api/status", () =>
 
 app.MapGet("/api/disks", () => ListUsbDisksResult());
 app.MapGet("/api/disks/{index:int}/open", (int index) => OpenDiskSession(index));
+app.MapDelete("/api/sessions/{sessionId:guid}", (Guid sessionId) =>
+{
+    if (sessions.TryRemove(sessionId, out var session))
+    {
+        session.Handle.Dispose();
+        return Results.NoContent();
+    }
+
+    return Results.NotFound();
+});
 
 app.MapMethods("/api/sessions/{sessionId:guid}/image", new[] { "GET", "HEAD" },
     async (Guid sessionId, HttpContext context) =>
