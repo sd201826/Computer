@@ -271,6 +271,12 @@
       // The VM may already have stopped while the browser was closing it.
     }
 
+    if (selectedUsbImage && selectedUsbImage.sessionId &&
+        window.RestoreLabUsbBridge && typeof window.RestoreLabUsbBridge.closeSession === "function") {
+      await window.RestoreLabUsbBridge.closeSession(selectedUsbImage.sessionId);
+      selectedUsbImage.sessionId = null;
+    }
+
     screenContainer.querySelectorAll("canvas").forEach((canvas) => {
       if (canvas.id === "vga") {
         canvas.getContext("2d")?.clearRect(0, 0, canvas.width, canvas.height);
