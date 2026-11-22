@@ -167,6 +167,7 @@
 
     try {
       const session = await openSelectedSession();
+      activeSessions.add(session.sessionId);
       const imageUrl = BRIDGE_BASE + "/api/sessions/" + session.sessionId + "/image";
       dispatchBootImage({
         url: imageUrl,
