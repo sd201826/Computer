@@ -92,7 +92,7 @@ app.MapMethods("/api/sessions/{sessionId:guid}/image", new[] { "GET", "HEAD" },
         }
 
         if (!UsbDiskCatalog.TryParseRange(
-                context.Request.Headers.Range.ToString(),
+                context.Request.Headers["Range"].ToString(),
                 session.Disk.SizeBytes,
                 out var start,
                 out var end))
