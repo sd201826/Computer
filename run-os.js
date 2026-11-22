@@ -214,6 +214,11 @@
         if (failed) {
           Promise.resolve().then(() => failed.stop()).then(() => failed.destroy()).catch(() => {});
         }
+        if (selectedUsbImage && selectedUsbImage.sessionId &&
+            window.RestoreLabUsbBridge && typeof window.RestoreLabUsbBridge.closeSession === "function") {
+          window.RestoreLabUsbBridge.closeSession(selectedUsbImage.sessionId);
+          selectedUsbImage.sessionId = null;
+        }
       });
 
       setControls();
@@ -229,6 +234,11 @@
       setControls();
       setStatus("Could not start the virtual PC", "error");
       detail.textContent = error && error.message ? error.message : "An unexpected error occurred.";
+      if (selectedUsbImage && selectedUsbImage.sessionId &&
+          window.RestoreLabUsbBridge && typeof window.RestoreLabUsbBridge.closeSession === "function") {
+        await window.RestoreLabUsbBridge.closeSession(selectedUsbImage.sessionId);
+        selectedUsbImage.sessionId = null;
+      }
       startButton.disabled = false;
     }
   }
