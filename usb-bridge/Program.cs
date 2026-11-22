@@ -35,6 +35,17 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 var sessions = new ConcurrentDictionary<Guid, UsbDiskSession>();
 
+app.Lifetime.ApplicationStopping.Register(() =>
+{
+    foreach (var entry in sessions)
+    {
+        if (sessions.TryRemove(entry.Key, out var session))
+        {
+            session.Handle.Dispose();
+        }
+    }
+});
+
 app.UseCors("RestoreLabOnly");
 app.Use(async (context, next) =>
 {
