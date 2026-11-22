@@ -279,12 +279,15 @@
 
     placeholder.hidden = false;
     setStatus("Virtual PC powered off", "ready");
-    detail.textContent = "The session ended. Changes to the temporary virtual disk are cleared when you power off.";
+    detail.textContent = selectedUsbImage ? "The virtual session ended. The physical USB was not modified." : "The session ended. Changes to the temporary virtual disk are cleared when you power off.";
     setControls();
   }
 
   isoInput.addEventListener("change", () => {
     const file = isoInput.files && isoInput.files[0];
+    if (selectedUsbImage && selectedUsbImage.objectUrl) URL.revokeObjectURL(selectedUsbImage.url);
+    selectedUsbImage = null;
+
     if (file && !/\.(iso|img)$/i.test(file.name)) {
       isoInput.value = "";
       showSelectedIso(null);
@@ -292,8 +295,7 @@
       detail.textContent = "Select a bootable .iso or .img file.";
       return;
     }
-    if (selectedUsbImage && selectedUsbImage.objectUrl) URL.revokeObjectURL(selectedUsbImage.url);
-    selectedUsbImage = null;
+
     showSelectedIso(file);
     setStatus(file ? "Local disk image selected" : "Ready — press Start OS", "ready");
   });
