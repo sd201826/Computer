@@ -1,31 +1,45 @@
-# Restore Lab — USB Browser & Virtual PC
+# Restore Lab — USB Workspace & Browser OS
 
 Website: https://restore-lab.pages.dev
 
-Restore Lab is a browser workspace for reading files from a USB folder and running a disk image inside an emulated computer. The website runs from Cloudflare Pages; it does not require a local Node.js, Python, or Visual Studio installation.
+Restore Lab can browse an ordinary Windows-mounted USB folder and boot a Rufus-written USB disk inside a browser-based virtual PC. The virtual PC is separate from Windows on your laptop, so it does not restart or replace your real operating system.
 
-## USB Reader
+## Use a Rufus-written USB
 
-1. Plug in a USB drive and wait for Windows to show it in File Explorer.
-2. Open https://restore-lab.pages.dev and choose **Connect USB folder**.
-3. In the browser folder picker, select the USB drive or a folder on it.
-4. Browse files and folders, search names, and preview supported text and image files.
+1. Download the Restore Lab ISO and burn it to a USB with Rufus as usual.
+2. Plug the USB into your Windows computer.
+3. Download **RestoreLabUsbBridge-win-x64.zip** from the [Restore Lab GitHub release](https://github.com/sd201826/Computer/releases/tag/restore-lab-live-latest).
+4. Extract the ZIP and run **RestoreLabUsbBridge.exe**. Approve the Windows administrator prompt.
+5. Keep the helper's console window open.
+6. Open the [Browser OS page](https://restore-lab.pages.dev/run.html).
+7. Click **Connect Windows USB Bridge**, approve Chrome's Loopback network permission if prompted, and select your Rufus USB.
+8. Click **Boot selected USB**. The virtual PC reads the USB image in chunks while the helper remains open.
 
-Access is read-only. The site reads only the folder you choose; it does not upload file contents to Restore Lab. If the folder picker is unavailable, use the fallback folder picker.
+The helper is a self-contained Windows x64 executable; no separate .NET installation is required.
 
-## Run an OS in the website
+## Save the USB in browser storage
 
-Open the [Browser OS](https://restore-lab.pages.dev/run.html).
+On the Browser OS page, click **Save a copy in browser storage**. Restore Lab checks the available browser storage and copies the complete USB image to the browser's Origin Private File System (OPFS). After the copy finishes, use **Boot saved copy**. The saved image remains in this browser until you delete it or clear the site's data.
 
-- The built-in Restore Lab ISO is streamed from the [GitHub release](https://github.com/sd201826/Computer/releases/tag/restore-lab-live-latest).
-- To run another image, click **Choose ISO / IMG from USB or PC** and select an ISO or IMG file from the USB drive or computer.
-- ISO files are connected as a virtual DVD. IMG files are connected as a virtual hard disk.
-- The browser VM has an isolated temporary virtual hard disk. Changes to that disk are cleared when you power off the VM.
+The browser localStorage API is not suitable for multi-gigabyte images, so the actual image is stored in OPFS. A small metadata record is kept in localStorage. Browser quota varies by device and free space.
 
-## Important browser limits
+## Read-only safety
 
-A normal website cannot take over a physical USB mass-storage device or read raw USB sectors and boot sectors. The USB Reader can browse files only from a Windows-mounted folder that you explicitly select. A USB made bootable by Rufus is not an ISO file, so the website cannot attach that entire physical USB as a raw device. To run an OS in the browser, choose its original ISO or a compatible IMG file.
+- The helper binds only to 127.0.0.1; it does not expose the USB bridge to your Wi-Fi or the public internet.
+- It lists USB storage devices and opens the selected physical disk with read-only access.
+- The helper has no disk-write, formatting, partitioning, or erase endpoint.
+- The virtual machine reads the USB as an asynchronous, read-only image URL. Guest write attempts remain in the emulator's temporary memory overlay and are never sent to the physical USB.
+- The helper must remain running while booting directly from a USB. Close its console window to stop it.
+- The browser bridge accepts requests only from https://restore-lab.pages.dev.
 
-The browser VM runs separately from your real Windows session. It does not restart your PC, access your internal Windows drive, or install an OS onto your physical USB.
+## Compatibility notes
 
-Restore Lab is Debian-based Linux, not Microsoft Windows. Windows-style setup screens included in the image are visual previews only.
+The virtual PC uses SeaBIOS (legacy BIOS). Images that require UEFI-only boot may not start. Large USBs can be booted directly without first copying the whole disk into browser storage. Saving a copy requires enough available browser storage for the full physical disk size.
+
+## Ordinary USB folder reader
+
+The home page's **Connect USB folder** button still uses the browser folder picker for normal files and folders. That is separate from the raw-disk bridge used for Rufus USBs.
+
+## Built-in Restore Lab system
+
+The built-in Restore Lab ISO is a Debian-based Linux live system. It is not Microsoft Windows. The Windows-inspired setup screen is a visual demo only.
