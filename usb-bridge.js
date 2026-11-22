@@ -28,6 +28,7 @@
   let selectedDisk = null;
   let savedFile = null;
   let savedUrl = null;
+  const activeSessions = new Set();
 
   function setStatus(message, kind = "info") {
     status.textContent = message;
@@ -67,6 +68,16 @@
       mode: "cors"
     });
     return response;
+  }
+
+  async function closeSession(sessionId) {
+    if (!sessionId) return;
+    activeSessions.delete(sessionId);
+    try {
+      await bridgeGet("/api/sessions/" + encodeURIComponent(sessionId), { method: "DELETE" });
+    } catch (error) {
+      // The bridge will release all handles when it closes.
+    }
   }
 
   function updateButtons() {
@@ -163,7 +174,8 @@
         size: session.sizeBytes,
         name: session.model + " — Rufus USB",
         source: "Live USB (read-only)",
-        isUsbImage: true
+        isUsbImage: true,
+        sessionId: session.sessionId
       });
       setStatus("USB attached to the virtual PC. The helper must stay open while it runs.", "ok");
     } catch (error) {
@@ -207,8 +219,11 @@
 
     let writable = null;
     let completed = false;
+    let copySessionId = null;
     try {
       const session = await openSelectedSession();
+      copySessionId = session.sessionId;
+      activeSessions.add(copySessionId);
       const estimate = await navigator.storage.estimate();
       const free = Number.isFinite(estimate.quota) && Number.isFinite(estimate.usage)
         ? Math.max(0, estimate.quota - estimate.usage)
@@ -291,6 +306,7 @@
       setStatus(error.message || "Could not save the USB image.", "error");
       progressText.textContent = "Copy did not finish.";
     } finally {
+      if (copySessionId) await closeSession(copySessionId);
       if (!completed) progressWrap.hidden = true;
       updateButtons();
     }
@@ -338,6 +354,8 @@
     }
     updateButtons();
   }
+
+  window.RestoreLabUsbBridge = { closeSession };
 
   connectButton.addEventListener("click", connectBridge);
   refreshButton.addEventListener("click", async () => {
